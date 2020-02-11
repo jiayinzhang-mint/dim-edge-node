@@ -1,8 +1,6 @@
 package tcp
 
 import (
-	"bufio"
-	"fmt"
 	"net"
 	"os"
 	"time"
@@ -34,7 +32,7 @@ func (s *SocketListener) Listen() {
 
 	for {
 		conn, _ := ln.AcceptTCP()
-		go s.read(conn)
+		go s.handleRead(conn)
 	}
 }
 
@@ -51,8 +49,8 @@ func (s *SocketListener) keepAlive(conn *net.TCPConn) error {
 	return conn.SetKeepAlivePeriod(*s.KeepAlivePeriod)
 }
 
-// Read ready for processing single data
-func (s *SocketListener) read(conn *net.TCPConn) {
+// HandleRead read & process single data
+func (s *SocketListener) handleRead(conn *net.TCPConn) {
 	ipStr := conn.RemoteAddr().String()
 
 	// Close if disconnected
@@ -62,15 +60,15 @@ func (s *SocketListener) read(conn *net.TCPConn) {
 	}()
 
 	// Read message
-	reader := bufio.NewReader(conn)
 	for {
-		message, err := reader.ReadString('\n')
-		if err != nil {
-			return
+		buffer := make([]byte, 1024)
+		length, _ := conn.Read(buffer)
+
+		if length > 12 {
+			data := buffer[:length]
+
+			logrus.Info("Received message: ", string(data))
+			conn.Write(data)
 		}
-		fmt.Println(message)
-		msg := time.Now().String() + "\n"
-		b := []byte(msg)
-		conn.Write(b)
 	}
 }
