@@ -13,7 +13,7 @@ import (
 func TestListen(t *testing.T) {
 	ssl := &SocketListener{
 		Address: "localhost",
-		Port:    "8000",
+		Port:    "9000",
 	}
 
 	ssl.Listen()
@@ -21,16 +21,17 @@ func TestListen(t *testing.T) {
 
 func TestWrite(t *testing.T) {
 	// Connect to socket server
-	conn, err := net.DialTimeout("tcp", "127.0.0.1:8000", 5*time.Second)
+	conn, err := net.DialTimeout("tcp", "127.0.0.1:9000", 5*time.Second)
 	if err != nil {
 		logrus.Error(err)
 		os.Exit(1)
 	}
 	defer conn.Close()
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		// Send data
-		data := "hello socket, this is message " + strconv.Itoa(i)
-		conn.Write([]byte(data))
-		time.Sleep(1 * time.Second)
+		data := "99 hello socket, this is message " + strconv.Itoa(i)
+		n, err := conn.Write([]byte(data))
+		logrus.Info(n, err)
+		time.Sleep(3 * time.Microsecond)
 	}
 }
