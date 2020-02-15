@@ -2,6 +2,7 @@ package store
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/influxdata/influxdb-client-go"
 	"github.com/sirupsen/logrus"
@@ -27,7 +28,9 @@ func (i *Influx) GetBasicURL() string {
 
 // ConnectToDB connect to influxdb
 func (i *Influx) ConnectToDB() (err error) {
-	i.HTTPClient = &http.Client{}
+	i.HTTPClient = &http.Client{
+		Timeout: 5 * time.Second,
+	}
 
 	// Create db client
 	i.DBClient, err = influxdb.New(i.Address, i.Token, influxdb.WithHTTPClient(i.HTTPClient))
