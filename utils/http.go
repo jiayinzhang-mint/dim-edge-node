@@ -97,8 +97,51 @@ func (h *HTTPInstance) Post(c *http.Client, url string, body map[string]interfac
 
 	logrus.Info("HTTP POST ", req.URL.String(), " ", res.StatusCode)
 
-	// Set cookies
+	// Get and store cookies
 	h.Cookies = res.Cookies()
+
+	// Read body
+	resJSON, _ := ioutil.ReadAll(res.Body)
+
+	return resJSON, nil
+}
+
+// Delete do DELETE request
+func (h *HTTPInstance) Delete(c *http.Client, url string, params map[string]string, header map[string]string) ([]byte, error) {
+	// Form request string
+	req, err := http.NewRequest("DELETEs", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Query params
+	q := req.URL.Query()
+	for i := range params {
+		if params[i] != "" {
+			q.Add(i, params[i])
+		}
+
+	}
+	req.URL.RawQuery = q.Encode()
+
+	// Set header
+	for i := range header {
+		req.Header.Set(i, header[i])
+	}
+
+	// Send request
+	res, resErr := c.Do(req)
+	if resErr != nil {
+		return nil, resErr
+	}
+	defer res.Body.Close()
+
+	// Check status code
+	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted && res.StatusCode != http.StatusNoContent {
+		return nil, fmt.Errorf("HTTP DELETE %s %d", req.URL.String(), res.StatusCode)
+	}
+
+	logrus.Info("HTTP DELETE ", req.URL.String(), " ", res.StatusCode)
 
 	// Read body
 	resJSON, _ := ioutil.ReadAll(res.Body)

@@ -39,8 +39,8 @@ message OpRes {
 
 // List all buckets
 message ListAllBucketsParams {
-  int32 offset = 1;
-  int32 limit = 2;
+  int32 page = 1;
+  int32 size = 2;
   string org = 3;
   string orgID = 4;
   string name = 5;

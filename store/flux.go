@@ -14,8 +14,8 @@ type Influx struct {
 	Address      string `json:"address"`
 	Token        string `json:"token"`
 	DBClient     *influxdb.Client
-	HTTPClient   *http.Client // http client for operation
-	HTTPInstance *utils.HTTPInstance
+	HTTPClient   *http.Client        // http client for operation
+	HTTPInstance *utils.HTTPInstance // http instance for session store
 }
 
 // GetDB return db instance
@@ -30,10 +30,12 @@ func (i *Influx) GetBasicURL() string {
 
 // ConnectToDB connect to influxdb
 func (i *Influx) ConnectToDB() (err error) {
+	// Create http clients
 	i.HTTPClient = &http.Client{
 		Timeout: 5 * time.Second,
 	}
 
+	// Create http instance
 	i.HTTPInstance = &utils.HTTPInstance{}
 
 	// Create db client

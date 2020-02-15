@@ -7,7 +7,7 @@ import (
 )
 
 // ListAllBucket list all bucket
-func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, name string) (bucket []protocol.Bucket, err error) {
+func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, name string) (bucket []*protocol.Bucket, err error) {
 	offset := (page - 1) * size
 
 	offsetStr := strconv.Itoa(offset)
@@ -25,7 +25,7 @@ func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, nam
 	}
 
 	type b struct {
-		Bucket []protocol.Bucket `json:"buckets"`
+		Bucket []*protocol.Bucket `json:"buckets"`
 	}
 	var resBody b
 	if err = json.Unmarshal(res, &resBody); err != nil {
@@ -37,13 +37,13 @@ func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, nam
 }
 
 // RetrieveBucket retrieve a bucket by id
-func (i *Influx) RetrieveBucket(bucketID string) (bucket protocol.Bucket, err error) {
+func (i *Influx) RetrieveBucket(bucketID string) (bucket *protocol.Bucket, err error) {
 	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/buckets/"+bucketID, nil, nil)
 	if err != nil {
 		return
 	}
 
-	if err = json.Unmarshal(res, &bucket); err != nil {
+	if err = json.Unmarshal(res, bucket); err != nil {
 		return
 	}
 
@@ -51,7 +51,7 @@ func (i *Influx) RetrieveBucket(bucketID string) (bucket protocol.Bucket, err er
 }
 
 // RetrieveBucketLog retrieve bucket log by id
-func (i *Influx) RetrieveBucketLog(bucketID string, page int, size int) (log []protocol.RetreiveBucketLogRes_Log, err error) {
+func (i *Influx) RetrieveBucketLog(bucketID string, page int, size int) (log []*protocol.RetreiveBucketLogRes_Log, err error) {
 	offset := (page - 1) * size
 
 	offsetStr := strconv.Itoa(offset)
@@ -66,7 +66,7 @@ func (i *Influx) RetrieveBucketLog(bucketID string, page int, size int) (log []p
 	}
 
 	type b struct {
-		Logs []protocol.RetreiveBucketLogRes_Log `json:"logs"`
+		Logs []*protocol.RetreiveBucketLogRes_Log `json:"logs"`
 	}
 	var resBody b
 	if err = json.Unmarshal(res, &resBody); err != nil {
@@ -74,5 +74,14 @@ func (i *Influx) RetrieveBucketLog(bucketID string, page int, size int) (log []p
 	}
 
 	log = resBody.Logs
+	return
+}
+
+// DeleteBucket delete bucket by id
+func (i *Influx) DeleteBucket(bucketID string) (err error) {
+	if _, err = i.HTTPInstance.Delete(i.HTTPClient, i.GetBasicURL()+"/buckets/"+bucketID, nil, nil); err != nil {
+		return err
+	}
+
 	return
 }
