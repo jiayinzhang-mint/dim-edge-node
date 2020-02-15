@@ -1,8 +1,8 @@
 package store
 
 import (
+	"dim-edge-node/utils"
 	"encoding/base64"
-	"net/http"
 
 	"github.com/sirupsen/logrus"
 )
@@ -16,17 +16,12 @@ func (i *Influx) SignIn(username string, password string) (err error) {
 		return base64.StdEncoding.EncodeToString([]byte(auth))
 	}()
 
-	// Form request string
-	req, err := http.NewRequest("POST", i.GetBasicURL()+"/signin", nil)
-	if err != nil {
-		return
-	}
-
-	// Basic auth
-	req.Header.Add("Authorization", "Basic "+basicAuth)
-
-	// Send request
-	if _, err = i.HTTPClient.Do(req); err != nil {
+	if _, err = utils.HTTP().Post(
+		i.HTTPClient, i.GetBasicURL()+"/signin",
+		nil,
+		map[string]string{
+			"Authorization": "Basic " + basicAuth,
+		}); err != nil {
 		return
 	}
 
@@ -36,20 +31,12 @@ func (i *Influx) SignIn(username string, password string) (err error) {
 }
 
 // SignOut expire current session
-func (i *Influx) SignOut() error {
-
-	// Form request string
-	req, err := http.NewRequest("POST", i.GetBasicURL()+"/signout", nil)
-	if err != nil {
-		return err
-	}
-
-	// Send request
-	if _, err = i.HTTPClient.Do(req); err != nil {
-		return err
+func (i *Influx) SignOut() (err error) {
+	if _, err = utils.HTTP().Post(i.HTTPClient, i.GetBasicURL()+"/signout", nil, nil); err != nil {
+		return
 	}
 
 	logrus.Info("Influx HTTP Client signed out")
 
-	return err
+	return
 }
