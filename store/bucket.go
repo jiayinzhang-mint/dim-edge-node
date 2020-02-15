@@ -1,24 +1,42 @@
 package store
 
 import (
-	"dim-edge-node/utils"
+	"dim-edge-node/protocol"
+	"encoding/json"
+	"strconv"
 )
 
 // ListAllBucket list all bucket
-func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, name string) (bucket []interface{}, err error) {
+func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, name string) (bucket []protocol.Bucket, err error) {
 	offset := (page - 1) * size
 
-	_, err = utils.HTTP().Get(i.HTTPClient, i.GetBasicURL()+"/buckets", map[string]string{
-		"offset": string(offset),
-		"limit":  string(size),
+	offsetStr := strconv.Itoa(offset)
+	sizeStr := strconv.Itoa(size)
+
+	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/buckets", map[string]string{
+		"offset": offsetStr,
+		"limit":  sizeStr,
 		"org":    org,
 		"orgID":  orgID,
 		"name":   name,
 	}, nil)
-
 	if err != nil {
 		return
 	}
 
+	type b struct {
+		Bucket []protocol.Bucket `json:"buckets"`
+	}
+	var resBody b
+	if err = json.Unmarshal(res, &resBody); err != nil {
+		return
+	}
+
+	bucket = resBody.Bucket
 	return
+}
+
+// RetrieveBucket retrieve a bucket by id
+func (i *Influx) RetrieveBucket(bucketID string) {
+
 }

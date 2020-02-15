@@ -1,6 +1,7 @@
 package store
 
 import (
+	"dim-edge-node/utils"
 	"net/http"
 	"time"
 
@@ -10,10 +11,11 @@ import (
 
 // Influx db instance
 type Influx struct {
-	Address    string `json:"address"`
-	Token      string `json:"token"`
-	DBClient   *influxdb.Client
-	HTTPClient *http.Client // http client for operation
+	Address      string `json:"address"`
+	Token        string `json:"token"`
+	DBClient     *influxdb.Client
+	HTTPClient   *http.Client // http client for operation
+	HTTPInstance *utils.HTTPInstance
 }
 
 // GetDB return db instance
@@ -31,6 +33,8 @@ func (i *Influx) ConnectToDB() (err error) {
 	i.HTTPClient = &http.Client{
 		Timeout: 5 * time.Second,
 	}
+
+	i.HTTPInstance = &utils.HTTPInstance{}
 
 	// Create db client
 	i.DBClient, err = influxdb.New(i.Address, i.Token, influxdb.WithHTTPClient(i.HTTPClient))

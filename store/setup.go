@@ -1,7 +1,7 @@
 package store
 
 import (
-	"dim-edge-node/utils"
+	"encoding/json"
 
 	"github.com/sirupsen/logrus"
 )
@@ -9,9 +9,12 @@ import (
 // CheckSetup Check if database has default user, org, bucket
 func (i *Influx) CheckSetup() (err error) {
 	// Form request string
-	res, err := utils.HTTP().Get(i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
+	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
 
-	if res["Allowed"] == "true" {
+	var resBody map[string]interface{}
+	json.Unmarshal(res, &resBody)
+
+	if resBody["Allowed"] == "true" {
 		logrus.Error("Influx has NOT been setup")
 		return
 	}
@@ -29,12 +32,15 @@ func (i *Influx) Setup(username string, password string, org string, bucket stri
 	body["bucket"] = bucket
 	body["retentionPeriodHrs"] = retentionPeriodHrs
 
-	res, queryErr := utils.HTTP().Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
+	res, queryErr := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
 	if queryErr != nil {
 		return
 	}
 
-	if res["code"] == "conflict" {
+	var resBody map[string]interface{}
+	json.Unmarshal(res, &resBody)
+
+	if resBody["code"] == "conflict" {
 		logrus.Error("ALREADY setup", res)
 		return
 	}
