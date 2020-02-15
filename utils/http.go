@@ -26,7 +26,6 @@ func (h *HTTPInstance) Get(c *http.Client, url string, params map[string]string,
 	// Query params
 	q := req.URL.Query()
 	for i := range params {
-		logrus.Info(i, params[i])
 		if params[i] != "" {
 			q.Add(i, params[i])
 		}
