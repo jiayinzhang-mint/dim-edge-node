@@ -21,6 +21,25 @@ func (i *Influx) CheckSetup() (err error) {
 }
 
 // Setup Set up initial user, org and bucket
-func (i *Influx) Setup() (err error) {
+func (i *Influx) Setup(username string, password string, org string, bucket string, retentionPeriodHrs int) (err error) {
+	body := make(map[string]interface{})
+	body["username"] = username
+	body["password"] = password
+	body["org"] = org
+	body["bucket"] = bucket
+	body["retentionPeriodHrs"] = retentionPeriodHrs
+
+	res, queryErr := utils.HTTP().Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
+	if queryErr != nil {
+		return
+	}
+
+	if res["code"] == "conflict" {
+		logrus.Info("ALREADY setup", res)
+		return
+	}
+
+	logrus.Info("Setup successfully", res)
+
 	return
 }
