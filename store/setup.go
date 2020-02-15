@@ -9,7 +9,7 @@ import (
 // CheckSetup Check if database has default user, org, bucket
 func (i *Influx) CheckSetup() (err error) {
 	// Form request string
-	res, err := utils.HTTP().Get(i.GetBasicURL() + "/setup")
+	res, err := utils.HTTP().Get(i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
 
 	if res["Allowed"] == "true" {
 		logrus.Error("Influx has NOT been setup")
@@ -35,7 +35,7 @@ func (i *Influx) Setup(username string, password string, org string, bucket stri
 	}
 
 	if res["code"] == "conflict" {
-		logrus.Info("ALREADY setup", res)
+		logrus.Error("ALREADY setup", res)
 		return
 	}
 

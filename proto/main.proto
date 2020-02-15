@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package proto;
+
+import "proto/bucket.proto";
+
+service StoreService {
+  rpc ListAllBuckets(ListAllBucketsParams) returns (ListAllBucketsRes) {}
+  rpc RetrieveBucket(RetrieveBucketParams) returns (Bucket) {}
+  rpc RetrieveBucketLog(RetreiveBucketLogParams)
+      returns (RetreiveBucketLogRes) {}
+  rpc DeleteBucket(DeleteBucketParams) returns (OpRes) {}
+}

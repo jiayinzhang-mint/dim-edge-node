@@ -3,7 +3,6 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,29 +19,38 @@ func HTTP() *HTTPInstance {
 }
 
 // Get do GET request
-func (*HTTPInstance) Get(url string) (map[string]interface{}, error) {
-	response, err := http.Get(url)
+func (*HTTPInstance) Get(c *http.Client, url string, params map[string]string, header map[string]string) (map[string]interface{}, error) {
+	// Form request string
+	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("HTTP get error: uri=%v , statusCode=%v", url, response.StatusCode)
+	// Query params
+	q := req.URL.Query()
+	for i := range params {
+		q.Add(i, params[i])
+	}
+	req.URL.Query().Encode()
+
+	// Set header
+	for i := range header {
+		req.Header.Set(i, header[i])
 	}
 
-	// Ready body
-	resJSON, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
+	// Send request
+	res, resErr := c.Do(req)
+	if resErr != nil {
+		return nil, resErr
 	}
-	var res map[string]interface{}
-	mErr := json.Unmarshal(resJSON, &res)
-	if mErr != nil {
-		return nil, err
-	}
+	defer res.Body.Close()
 
-	return res, nil
+	// Read body
+	var resBody map[string]interface{}
+	resJSON, _ := ioutil.ReadAll(res.Body)
+	json.Unmarshal(resJSON, &resBody)
+
+	return resBody, nil
 }
 
 // Post do POST request
