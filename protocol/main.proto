@@ -3,11 +3,18 @@ syntax = "proto3";
 package protocol;
 
 import "protocol/bucket.proto";
+import "protocol/auth.proto";
 
 service StoreService {
+
+  // Bucket
   rpc ListAllBuckets(ListAllBucketsParams) returns (ListAllBucketsRes) {}
   rpc RetrieveBucket(RetrieveBucketParams) returns (Bucket) {}
   rpc RetrieveBucketLog(RetreiveBucketLogParams)
       returns (RetreiveBucketLogRes) {}
   rpc DeleteBucket(DeleteBucketParams) returns (OpRes) {}
+
+  // Auth
+  rpc ListAuthorization(ListAuthorizationParams)
+      returns (ListAuthorizationRes) {}
 }

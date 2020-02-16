@@ -1,7 +1,10 @@
 package store
 
 import (
+	"dim-edge-node/protocol"
+	"dim-edge-node/utils"
 	"encoding/base64"
+	"encoding/json"
 
 	"github.com/sirupsen/logrus"
 )
@@ -36,6 +39,44 @@ func (i *Influx) SignOut() (err error) {
 	}
 
 	logrus.Info("Influx HTTP Client signed out")
+
+	return
+}
+
+// ListAuthorization list all authorizations
+func (i *Influx) ListAuthorization(userID string, user string, orgID string, org string) (auth []*protocol.Authorization, err error) {
+	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/authorizations", map[string]string{
+		"user":   user,
+		"userID": userID,
+		"orgID":  orgID,
+		"org":    org,
+	}, nil)
+	if err != nil {
+		return
+	}
+
+	type a struct {
+		Authorizations []*protocol.Authorization `json:"authorizations"`
+	}
+	var resBody a
+	err = json.Unmarshal(res, &resBody)
+
+	auth = resBody.Authorizations
+	return
+}
+
+// CreateAuthorization create authorization
+func (i *Influx) CreateAuthorization(status string, description string, orgID string, p []*protocol.Authorization_Permission) (auth *protocol.Authorization, err error) {
+
+	var reqBody map[string]interface{}
+	reqBody = utils.StructToMap(&protocol.Authorization{
+		Status:      status,
+		Description: description,
+		OrgID:       orgID,
+		Permissions: p,
+	})
+
+	_, err = i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/authorizations", reqBody, nil)
 
 	return
 }

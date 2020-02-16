@@ -51,7 +51,7 @@ func (h *HTTPInstance) Get(c *http.Client, url string, params map[string]string,
 	defer res.Body.Close()
 
 	// Check status code
-	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted && res.StatusCode != http.StatusNoContent {
+	if res.StatusCode >= 400 {
 		return nil, fmt.Errorf("HTTP GET %s %d", req.URL.String(), res.StatusCode)
 	}
 
@@ -91,7 +91,7 @@ func (h *HTTPInstance) Post(c *http.Client, url string, body map[string]interfac
 	defer res.Body.Close()
 
 	// Check status code
-	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted && res.StatusCode != http.StatusNoContent {
+	if res.StatusCode >= 400 {
 		return nil, fmt.Errorf("HTTP POST %s %d", req.URL.String(), res.StatusCode)
 	}
 
@@ -109,7 +109,7 @@ func (h *HTTPInstance) Post(c *http.Client, url string, body map[string]interfac
 // Delete do DELETE request
 func (h *HTTPInstance) Delete(c *http.Client, url string, params map[string]string, header map[string]string) ([]byte, error) {
 	// Form request string
-	req, err := http.NewRequest("DELETEs", url, nil)
+	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func (h *HTTPInstance) Delete(c *http.Client, url string, params map[string]stri
 	defer res.Body.Close()
 
 	// Check status code
-	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted && res.StatusCode != http.StatusNoContent {
+	if res.StatusCode >= 400 {
 		return nil, fmt.Errorf("HTTP DELETE %s %d", req.URL.String(), res.StatusCode)
 	}
 

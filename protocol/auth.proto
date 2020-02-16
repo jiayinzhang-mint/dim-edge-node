@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package protocol;
+
+message Authorization {
+  string status = 1;
+  string description = 2;
+  string createdAt = 3;
+  string updatedAt = 4;
+  string orgID = 5;
+  string id = 6;
+  string token = 7;
+  string userID = 8;
+  string org = 9;
+  repeated Permission permissions = 10;
+
+  message Permission {
+    string action = 1;
+    Resource resource = 2;
+
+    message Resource {
+      string type = 1;
+      string id = 2;
+      string name = 3;
+      string orgID = 4;
+      string org = 5;
+    }
+  }
+}
+
+// List authorization
+message ListAuthorizationParams {
+  string user = 1;
+  string userID = 2;
+  string org = 3;
+  string orgID = 4;
+}
+
+message ListAuthorizationRes { repeated Authorization authorization = 1; }
