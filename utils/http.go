@@ -50,15 +50,15 @@ func (h *HTTPInstance) Get(c *http.Client, url string, params map[string]string,
 	}
 	defer res.Body.Close()
 
-	// Check status code
-	if res.StatusCode >= 400 {
-		return nil, fmt.Errorf("HTTP GET %s %d", req.URL.String(), res.StatusCode)
-	}
-
 	logrus.Info("HTTP GET ", req.URL.String(), " ", res.StatusCode)
 
 	// Read body
 	resJSON, _ := ioutil.ReadAll(res.Body)
+
+	// Check status code
+	if res.StatusCode >= 400 {
+		return resJSON, fmt.Errorf("HTTP GET %s %d", req.URL.String(), res.StatusCode)
+	}
 
 	return resJSON, nil
 }
@@ -90,11 +90,6 @@ func (h *HTTPInstance) Post(c *http.Client, url string, body map[string]interfac
 	}
 	defer res.Body.Close()
 
-	// Check status code
-	if res.StatusCode >= 400 {
-		return nil, fmt.Errorf("HTTP POST %s %d", req.URL.String(), res.StatusCode)
-	}
-
 	logrus.Info("HTTP POST ", req.URL.String(), " ", res.StatusCode)
 
 	// Get and store cookies
@@ -102,6 +97,11 @@ func (h *HTTPInstance) Post(c *http.Client, url string, body map[string]interfac
 
 	// Read body
 	resJSON, _ := ioutil.ReadAll(res.Body)
+
+	// Check status code
+	if res.StatusCode >= 400 {
+		return resJSON, fmt.Errorf("HTTP POST %s %d", req.URL.String(), res.StatusCode)
+	}
 
 	return resJSON, nil
 }
@@ -136,15 +136,15 @@ func (h *HTTPInstance) Delete(c *http.Client, url string, params map[string]stri
 	}
 	defer res.Body.Close()
 
-	// Check status code
-	if res.StatusCode >= 400 {
-		return nil, fmt.Errorf("HTTP DELETE %s %d", req.URL.String(), res.StatusCode)
-	}
-
 	logrus.Info("HTTP DELETE ", req.URL.String(), " ", res.StatusCode)
 
 	// Read body
 	resJSON, _ := ioutil.ReadAll(res.Body)
+
+	// Check status code
+	if res.StatusCode >= 400 {
+		return resJSON, fmt.Errorf("HTTP DELETE %s %d", req.URL.String(), res.StatusCode)
+	}
 
 	return resJSON, nil
 }

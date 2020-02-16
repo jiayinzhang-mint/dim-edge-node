@@ -76,7 +76,13 @@ func (i *Influx) CreateAuthorization(status string, description string, orgID st
 		Permissions: p,
 	})
 
-	_, err = i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/authorizations", reqBody, nil)
+	res, err := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/authorizations", reqBody, nil)
+	if err != nil {
+		var b protocol.OpRes
+		json.Unmarshal(res, &b)
+		logrus.Info(b)
+		return
+	}
 
 	return
 }
