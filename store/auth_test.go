@@ -80,6 +80,6 @@ func TestCreateAuthorization(*testing.T) {
 			Type: "buckets",
 		},
 	})
-	res, err := influx.CreateAuthorization("active", "testbiu", "INSDIM", p)
+	res, err := influx.CreateAuthorization("active", "testbiu", "a9a72b93088f4c8f", p)
 	logrus.Info(res, err)
 }

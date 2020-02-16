@@ -17,4 +17,5 @@ service StoreService {
   // Auth
   rpc ListAuthorization(ListAuthorizationParams)
       returns (ListAuthorizationRes) {}
+  rpc CreateAuthorization(CreateAuthorizationParams) returns (Authorization) {}
 }

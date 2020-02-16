@@ -37,3 +37,11 @@ message ListAuthorizationParams {
 }
 
 message ListAuthorizationRes { repeated Authorization authorization = 1; }
+
+// Create authorization
+message CreateAuthorizationParams {
+  string status = 1;
+  string description = 2;
+  string orgID = 3;
+  repeated Authorization.Permission permissions = 4;
+}

@@ -5,6 +5,7 @@ import (
 	"dim-edge-node/utils"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 )
@@ -67,22 +68,29 @@ func (i *Influx) ListAuthorization(userID string, user string, orgID string, org
 
 // CreateAuthorization create authorization
 func (i *Influx) CreateAuthorization(status string, description string, orgID string, p []*protocol.Authorization_Permission) (auth *protocol.Authorization, err error) {
-
-	var reqBody map[string]interface{}
-	reqBody = utils.StructToMap(&protocol.Authorization{
+	a := protocol.Authorization{
 		Status:      status,
 		Description: description,
 		OrgID:       orgID,
 		Permissions: p,
-	})
+	}
+	ai := utils.StructToMap(a)
+
+	reqBody := make(map[string]interface{})
+	reqBody["status"] = status
+	reqBody["description"] = description
+	reqBody["orgID"] = orgID
+	reqBody["permissions"] = ai["permissions"]
 
 	res, err := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/authorizations", reqBody, nil)
 	if err != nil {
 		var b protocol.OpRes
 		json.Unmarshal(res, &b)
-		logrus.Info(b)
+		err = fmt.Errorf(b.Code, b.Message)
 		return
 	}
+
+	err = json.Unmarshal(res, &auth)
 
 	return
 }

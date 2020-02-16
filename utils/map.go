@@ -7,7 +7,7 @@ import (
 
 // StructToMap convert nested struct to map[string]interface{}
 func StructToMap(item interface{}) map[string]interface{} {
-	res := map[string]interface{}{}
+	res := make(map[string]interface{})
 	if item == nil {
 		return res
 	}

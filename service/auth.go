@@ -10,3 +10,9 @@ func (g *GRPCServer) ListAuthorization(c context.Context, p *protocol.ListAuthor
 	auth.Authorization, err = g.Influx.ListAuthorization(p.UserID, p.User, p.OrgID, p.Org)
 	return
 }
+
+// CreateAuthorization create authorization
+func (g *GRPCServer) CreateAuthorization(c context.Context, p *protocol.CreateAuthorizationParams) (auth *protocol.Authorization, err error) {
+	auth, err = g.Influx.CreateAuthorization(p.Status, p.Description, p.OrgID, p.Permissions)
+	return
+}
