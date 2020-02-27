@@ -2,7 +2,6 @@ package tcp
 
 import (
 	"net"
-	"os"
 	"strings"
 	"sync"
 	"time"
@@ -19,7 +18,7 @@ type SocketListener struct {
 }
 
 // Listen start socket for async listening
-func (s *SocketListener) Listen() {
+func (s *SocketListener) Listen() (err error) {
 	var (
 		tcpAddr *net.TCPAddr
 		mutex   sync.Mutex // Mutex must be inited as an instance
@@ -30,7 +29,7 @@ func (s *SocketListener) Listen() {
 	ln, err := net.ListenTCP("tcp", tcpAddr)
 	if err != nil {
 		logrus.Error("TCP listen err", err)
-		os.Exit(1)
+		return
 	}
 	defer ln.Close()
 
