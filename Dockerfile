@@ -13,4 +13,7 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 
+EXPOSE 9090
+EXPOSE 9000
+
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X main.BuildEnv=prod" main.go
