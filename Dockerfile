@@ -13,7 +13,9 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X main.BuildEnv=prod" main.go
+
 EXPOSE 9090
 EXPOSE 9000
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X main.BuildEnv=prod" main.go
+ENTRYPOINT ["./main"]
