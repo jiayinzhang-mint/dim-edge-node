@@ -19,16 +19,6 @@ type GRPCServer struct {
 
 // StartServer start server
 func (g *GRPCServer) StartServer() (err error) {
-	// Connect to DB
-	g.Influx = &store.Influx{
-		Address: "http://127.0.0.1:9999",
-		Token:   "4oXjSoIuU1F3A1zu-xYp0eJ9q_vsLQmtDPPTNuDnrs7R7H7qGAQ1GNaX4hNtJKx5ZRfnoj_TW5Uwe5NJUBvLOA==",
-	}
-	err = g.Influx.ConnectToDB()
-	if err != nil {
-		logrus.Error(err)
-		return
-	}
 
 	lis, listenErr := net.Listen("tcp", g.Address)
 	if listenErr != nil {

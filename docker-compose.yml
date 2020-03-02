@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  dim-edge-influxdb:
+    container_name: dim-edge-influxdb
+    image: quay.io/influxdb/influxdb:2.0.0-beta
+    ports:
+      - 9999:9999
+    restart: unless-stopped
+    networks:
+      - core
+
+  dim-edge-node:
+    container_name: dim-edge-node
+    image: mintxtinm/dim-edge-node
+    ports:
+      - 9090:9090
+      - 9000:9000
+    restart: always
+    depends_on:
+      - dim-edge-influxdb
+    networks:
+      - core
+
+networks:
+  core:
