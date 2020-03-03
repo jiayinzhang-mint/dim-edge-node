@@ -32,20 +32,17 @@ func (i *Influx) Setup(username string, password string, org string, bucket stri
 	body["bucket"] = bucket
 	body["retentionPeriodHrs"] = retentionPeriodHrs
 
-	res, queryErr := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
-	if queryErr != nil {
-		return
-	}
+	res, _ := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
 
 	var resBody map[string]interface{}
 	json.Unmarshal(res, &resBody)
 
 	if resBody["code"] == "conflict" {
-		logrus.Error("ALREADY setup", res)
+		logrus.Error("ALREADY setup", resBody)
 		return
 	}
 
-	logrus.Info("Setup successfully", res)
+	logrus.Info("Setup successfully", resBody)
 
 	return
 }
