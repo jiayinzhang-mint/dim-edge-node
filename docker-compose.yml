@@ -6,9 +6,7 @@ services:
     image: quay.io/influxdb/influxdb:2.0.0-beta
     ports:
       - 9999:9999
-    restart: unless-stopped
-    networks:
-      - core
+    restart: always
 
   dim-edge-node:
     container_name: dim-edge-node
@@ -19,8 +17,3 @@ services:
     restart: always
     depends_on:
       - dim-edge-influxdb
-    networks:
-      - core
-
-networks:
-  core:
