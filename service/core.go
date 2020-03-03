@@ -22,7 +22,7 @@ func (g *GRPCServer) StartServer() (err error) {
 
 	lis, listenErr := net.Listen("tcp", g.Address)
 	if listenErr != nil {
-		log.Fatalf("dim-edge GRPC server failed to listen: %v", listenErr)
+		log.Fatalf("dim-edge node GRPC server failed to listen: %v", listenErr)
 	}
 	s := grpc.NewServer()
 
@@ -31,9 +31,9 @@ func (g *GRPCServer) StartServer() (err error) {
 	reflection.Register(s)
 
 	// Start serve
-	logrus.New().Infof("dim-edge GRPC server listening at %s", g.Address)
+	logrus.New().Infof("dim-edge node GRPC server listening at %s", g.Address)
 	if err = s.Serve(lis); err != nil {
-		logrus.Fatalf("dim-edge GRPC server failed to serve: %v", err)
+		logrus.Fatalf("dim-edge node GRPC server failed to serve: %v", err)
 		return
 	}
 

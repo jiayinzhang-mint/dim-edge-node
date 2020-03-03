@@ -10,7 +10,7 @@ import (
 func TestSignIn(t *testing.T) {
 	influx := &Influx{
 		Address: "http://127.0.0.1:9999",
-		Token:   "4oXjSoIuU1F3A1zu-xYp0eJ9q_vsLQmtDPPTNuDnrs7R7H7qGAQ1GNaX4hNtJKx5ZRfnoj_TW5Uwe5NJUBvLOA==",
+		Token:   "OmtoG5-MWHplbyT0QS2-HoDyfKAUpbYkkXf_W3nYDqwZe631h-NRGygJoEFyUeVxXknTewpOwa97A-q0BCI3eg==",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {
@@ -25,7 +25,7 @@ func TestSignIn(t *testing.T) {
 func TestSignOut(t *testing.T) {
 	influx := &Influx{
 		Address: "http://127.0.0.1:9999",
-		Token:   "4oXjSoIuU1F3A1zu-xYp0eJ9q_vsLQmtDPPTNuDnrs7R7H7qGAQ1GNaX4hNtJKx5ZRfnoj_TW5Uwe5NJUBvLOA==",
+		Token:   "OmtoG5-MWHplbyT0QS2-HoDyfKAUpbYkkXf_W3nYDqwZe631h-NRGygJoEFyUeVxXknTewpOwa97A-q0BCI3eg==",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {
@@ -40,7 +40,7 @@ func TestSignOut(t *testing.T) {
 func TestListAuthorization(*testing.T) {
 	influx := &Influx{
 		Address: "http://127.0.0.1:9999",
-		Token:   "4oXjSoIuU1F3A1zu-xYp0eJ9q_vsLQmtDPPTNuDnrs7R7H7qGAQ1GNaX4hNtJKx5ZRfnoj_TW5Uwe5NJUBvLOA==",
+		Token:   "OmtoG5-MWHplbyT0QS2-HoDyfKAUpbYkkXf_W3nYDqwZe631h-NRGygJoEFyUeVxXknTewpOwa97A-q0BCI3eg==",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {
@@ -60,7 +60,7 @@ func TestListAuthorization(*testing.T) {
 func TestCreateAuthorization(*testing.T) {
 	influx := &Influx{
 		Address: "http://127.0.0.1:9999",
-		Token:   "4oXjSoIuU1F3A1zu-xYp0eJ9q_vsLQmtDPPTNuDnrs7R7H7qGAQ1GNaX4hNtJKx5ZRfnoj_TW5Uwe5NJUBvLOA==",
+		Token:   "OmtoG5-MWHplbyT0QS2-HoDyfKAUpbYkkXf_W3nYDqwZe631h-NRGygJoEFyUeVxXknTewpOwa97A-q0BCI3eg==",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {

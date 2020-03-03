@@ -42,7 +42,7 @@ var (
 )
 
 func main() {
-	logrus.Info("dim-edge Node service starting")
+	logrus.Info("dim-edge node service starting")
 
 	g.Go(func() error {
 		return startGRPCServer()
