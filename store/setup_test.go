@@ -8,16 +8,18 @@ import (
 
 func TestCheckSteup(t *testing.T) {
 	influx := &Influx{
-		Address: "http://127.0.0.1:9999",
+		Address: "http://192.168.64.9:31564",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {
 		logrus.Error(err)
 	}
 
-	if setup := influx.CheckSetup(); setup != nil {
-		logrus.Error(setup)
+	msg, err := influx.CheckSetup()
+	if err != nil {
+		logrus.Info(err)
 	}
+	logrus.Info(msg)
 }
 
 func TestSetup(t *testing.T) {

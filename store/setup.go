@@ -2,24 +2,28 @@ package store
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 )
 
 // CheckSetup Check if database has default user, org, bucket
-func (i *Influx) CheckSetup() (err error) {
-	// Form request string
+func (i *Influx) CheckSetup() (msg bool, err error) {
+	// Form request strinsg
 	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
 
 	var resBody map[string]interface{}
 	json.Unmarshal(res, &resBody)
 
-	if resBody["Allowed"] == "true" {
-		logrus.Error("Influx has NOT been setup")
+	logrus.Info(resBody["allowed"])
+	if resBody["allowed"] == true {
+		logrus.Info("Influx has NOT been setup")
+		msg = true
 		return
 	}
 
-	logrus.Error("Influx has ALREADY been setup")
+	msg = false
+	logrus.Info("Influx has ALREADY been setup")
 	return
 }
 
@@ -32,13 +36,17 @@ func (i *Influx) Setup(username string, password string, org string, bucket stri
 	body["bucket"] = bucket
 	body["retentionPeriodHrs"] = retentionPeriodHrs
 
-	res, _ := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
+	res, err := i.HTTPInstance.Post(i.HTTPClient, i.GetBasicURL()+"/setup", body, nil)
+	if err != nil {
+		return
+	}
 
 	var resBody map[string]interface{}
 	json.Unmarshal(res, &resBody)
 
 	if resBody["code"] == "conflict" {
 		logrus.Error("ALREADY setup", resBody)
+		err = fmt.Errorf("ALREADY setup")
 		return
 	}
 

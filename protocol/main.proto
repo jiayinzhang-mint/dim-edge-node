@@ -2,10 +2,16 @@ syntax = "proto3";
 
 package protocol;
 
+import "google/protobuf/empty.proto";
+
+import "protocol/setup.proto";
 import "protocol/bucket.proto";
 import "protocol/auth.proto";
 
 service StoreService {
+  // Setup
+  rpc CheckSetup(google.protobuf.Empty) returns (CheckSetupRes) {}
+  rpc Setup(SetupParams) returns (google.protobuf.Empty) {}
 
   // Bucket
   rpc ListAllBuckets(ListAllBucketsParams) returns (ListAllBucketsRes) {}
