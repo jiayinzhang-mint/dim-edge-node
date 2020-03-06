@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    io.kompose.service: dim-edge-influxdb
+    io.kompose.service: dim-edge-influxdb-1
   name: dim-edge-influxdb-1
 spec:
   externalTrafficPolicy: Local
