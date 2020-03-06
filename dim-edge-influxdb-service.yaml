@@ -2,13 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.21.0 ()
-  creationTimestamp: null
   labels:
     io.kompose.service: dim-edge-influxdb
-  name: dim-edge-influxdb
+  name: dim-edge-influxdb-1
 spec:
   externalTrafficPolicy: Local
   ports:
@@ -17,4 +13,4 @@ spec:
       targetPort: 9999
   type: NodePort
   selector:
-    io.kompose.service: dim-edge-influxdb
+    statefulset.kubernetes.io/pod-name: dim-edge-influxdb-1
