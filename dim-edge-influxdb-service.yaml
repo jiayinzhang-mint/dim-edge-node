@@ -1,3 +1,4 @@
+# service
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,12 +10,11 @@ metadata:
     io.kompose.service: dim-edge-influxdb
   name: dim-edge-influxdb
 spec:
+  externalTrafficPolicy: Local
   ports:
     - name: '9999'
       port: 9999
       targetPort: 9999
-  type: LoadBalancer
+  type: NodePort
   selector:
     io.kompose.service: dim-edge-influxdb
-status:
-  loadBalancer: {}
