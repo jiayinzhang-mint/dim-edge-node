@@ -38,7 +38,7 @@ func (i *Influx) ConnectToDB() (err error) {
 	// Create http instance
 	i.HTTPInstance = &utils.HTTPInstance{}
 
-	// Create db client
+	// Create db clients
 	i.DBClient, err = influxdb.New(i.Address, i.Token, influxdb.WithHTTPClient(i.HTTPClient))
 
 	if err != nil {

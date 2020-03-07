@@ -31,11 +31,6 @@ func startGRPCServer() (err error) {
 		Address: ":9090",
 	}
 
-	err = g.StartServer()
-	if err != nil {
-		return
-	}
-
 	g.Influx = &store.Influx{
 		Address: os.Getenv("INFLUX_ADDRESS"),
 	}
@@ -45,7 +40,13 @@ func startGRPCServer() (err error) {
 		logrus.Error(err)
 	}
 
+	err = g.StartServer()
+	if err != nil {
+		return
+	}
+
 	return
+
 }
 
 var (
@@ -54,8 +55,6 @@ var (
 
 func main() {
 	logrus.Info("dim-edge node service starting")
-
-	logrus.Info("INFLUX_ADDRESS", os.Getenv("INFLUX_ADDRESS"))
 
 	g.Go(func() error {
 		return startGRPCServer()
