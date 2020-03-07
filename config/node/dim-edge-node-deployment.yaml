@@ -31,6 +31,9 @@ spec:
             - containerPort: 9090
             - containerPort: 9000
           resources: {}
+          env:
+            - name: INFLUX_ADDRESS
+              value: dim-edge-influxdb-0
       restartPolicy: Always
       serviceAccountName: ''
       volumes: null

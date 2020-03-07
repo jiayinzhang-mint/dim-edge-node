@@ -2,7 +2,9 @@ package main
 
 import (
 	"dim-edge-node/service"
+	"dim-edge-node/store"
 	"dim-edge-node/tcp"
+	"os"
 
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
@@ -34,6 +36,15 @@ func startGRPCServer() (err error) {
 		return
 	}
 
+	g.Influx = &store.Influx{
+		Address: os.Getenv("INFLUX_ADDRESS"),
+	}
+
+	err = g.Influx.ConnectToDB()
+	if err != nil {
+		logrus.Error(err)
+	}
+
 	return
 }
 
@@ -43,6 +54,8 @@ var (
 
 func main() {
 	logrus.Info("dim-edge node service starting")
+
+	logrus.Info("INFLUX_ADDRESS", os.Getenv("INFLUX_ADDRESS"))
 
 	g.Go(func() error {
 		return startGRPCServer()

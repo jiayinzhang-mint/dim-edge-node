@@ -3,8 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    io.kompose.service: dim-edge-influxdb-1
-  name: dim-edge-influxdb-1
+    io.kompose.service: dim-edge-influxdb-0
+  name: dim-edge-influxdb-0
 spec:
   externalTrafficPolicy: Local
   ports:
@@ -13,4 +13,4 @@ spec:
       targetPort: 9999
   type: NodePort
   selector:
-    statefulset.kubernetes.io/pod-name: dim-edge-influxdb-1
+    statefulset.kubernetes.io/pod-name: dim-edge-influxdb-0
