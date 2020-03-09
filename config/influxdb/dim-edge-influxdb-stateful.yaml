@@ -32,7 +32,10 @@ spec:
           name: dim-edge-influxdb
           ports:
             - containerPort: 9999
-          resources: {}
+          resources:
+            limits:
+              cpu: '500m'
+              memory: '64Mi'
           volumeMounts:
             - mountPath: /var/lib/influxdb
               name: var-lib-influxdb

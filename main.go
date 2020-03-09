@@ -35,8 +35,8 @@ func startGRPCServer() (err error) {
 		Address: os.Getenv("INFLUX_ADDRESS"),
 	}
 
-	err = g.Influx.ConnectToDB()
-	if err != nil {
+	// connect to db
+	if err = g.Influx.ConnectToDB(); err != nil {
 		logrus.Error(err)
 	}
 
