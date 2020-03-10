@@ -33,9 +33,10 @@ spec:
           ports:
             - containerPort: 9999
           resources:
-            limits:
-              cpu: '500m'
-              memory: '64Mi'
+            {}
+            # limits:
+            #   cpu: '500m'
+            #   memory: '64Mi'
           volumeMounts:
             - mountPath: /var/lib/influxdb
               name: var-lib-influxdb
