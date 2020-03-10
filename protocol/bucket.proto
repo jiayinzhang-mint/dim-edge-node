@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package protocol;
+
+message Bucket {
+  string id = 1;
+  string orgID = 2;
+  string type = 3;
+  string name = 4;
+  string description = 5;
+  string rp = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+  repeated Label labels = 9;
+  repeated RetentionRule retentionRules = 10;
+
+  message Label {
+    string id = 1;
+    string orgID = 2;
+    string name = 3;
+    Properties properties = 4;
+
+    message Properties {
+      string color = 1;
+      string description = 2;
+    }
+  }
+
+  message RetentionRule {
+    string type = 1;
+    int32 everySeconds = 2;
+  }
+}
+
+message OpRes {
+  string code = 1;
+  string message = 2;
+}
+
+// List all buckets
+message ListAllBucketsParams {
+  int32 page = 1;
+  int32 size = 2;
+  string org = 3;
+  string orgID = 4;
+  string name = 5;
+}
+
+message ListAllBucketsRes {
+  repeated Bucket bucket = 1;
+  string msg = 2;
+}
+
+// Retrieve a bucket
+message RetrieveBucketParams { string bucketID = 1; }
+
+// Delete a bucket
+message DeleteBucketParams { string bucketID = 1; }
+
+// Retreive a bucket log
+message RetreiveBucketLogParams {
+  string bucketID = 1;
+  int32 page = 2;
+  int32 size = 3;
+}
+
+message RetreiveBucketLogRes {
+  repeated Log log = 1;
+
+  message Log {
+    string description = 1;
+    string time = 2;
+    string userID = 3;
+  }
+}
