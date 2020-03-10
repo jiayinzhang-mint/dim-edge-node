@@ -42,10 +42,20 @@ func (i *Influx) ConnectToDB() (err error) {
 	i.DBClient, err = influxdb.New(i.Address, i.Token, influxdb.WithHTTPClient(i.HTTPClient))
 
 	if err != nil {
+		logrus.Error(err)
 		return
 	}
 
 	logrus.Info("Influx DB connected")
+
+	// Check setup
+	setup, err := i.CheckSetup()
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+
+	logrus.Info(setup)
 
 	return
 }

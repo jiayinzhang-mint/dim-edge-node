@@ -11,6 +11,9 @@ import (
 func (i *Influx) CheckSetup() (msg bool, err error) {
 	// Form request strinsg
 	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
+	if err != nil {
+		return
+	}
 
 	var resBody map[string]interface{}
 	json.Unmarshal(res, &resBody)
