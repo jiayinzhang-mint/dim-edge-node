@@ -36,7 +36,7 @@ spec:
               memory: '128Mi'
           env:
             - name: INFLUX_ADDRESS
-              value: http://10.107.155.103:9999
+              value: http://dim-edge-influxdb-0:9999
       restartPolicy: Always
       serviceAccountName: ''
       volumes: null

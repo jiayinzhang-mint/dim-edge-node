@@ -24,32 +24,32 @@ spec:
     spec:
       serviceAccountName: metrics-server
       volumes:
-      # mount in tmp so we can safely use from-scratch images and/or read-only containers
-      - name: tmp-dir
-        emptyDir: {}
-      containers:
-      - name: metrics-server
-        image: k8s.gcr.io/metrics-server-amd64:v0.3.6
-        args:
-          - --cert-dir=/tmp
-          - --secure-port=4443
-        ports:
-        - name: main-port
-          containerPort: 4443
-          protocol: TCP
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1000
-        imagePullPolicy: IfNotPresent
-        volumeMounts:
+        # mount in tmp so we can safely use from-scratch images and/or read-only containers
         - name: tmp-dir
-          mountPath: /tmp
-        command:
-        - /metrics-server
-        - --kubelet-preferred-address-types=InternalIP
-        - --kubelet-insecure-tls
-        - --metric-resolution=30s
+          emptyDir: {}
+      containers:
+        - name: metrics-server
+          image: registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server-amd64:v0.3.6
+          args:
+            - --cert-dir=/tmp
+            - --secure-port=4443
+          ports:
+            - name: main-port
+              containerPort: 4443
+              protocol: TCP
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+          command:
+            - /metrics-server
+            - --kubelet-preferred-address-types=InternalIP
+            - --kubelet-insecure-tls
+            - --metric-resolution=30s
       nodeSelector:
         beta.kubernetes.io/os: linux
-        kubernetes.io/arch: "amd64"
+        kubernetes.io/arch: 'amd64'
