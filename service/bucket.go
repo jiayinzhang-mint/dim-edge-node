@@ -6,28 +6,45 @@ import (
 )
 
 // ListAllBuckets list all buckets
-func (g *GRPCServer) ListAllBuckets(c context.Context, p *protocol.ListAllBucketsParams) (r *protocol.ListAllBucketsRes, err error) {
+func (g *GRPCServer) ListAllBuckets(c context.Context, p *protocol.ListAllBucketsParams) (*protocol.ListAllBucketsRes, error) {
 	bucket, err := g.Influx.ListAllBucket(int(p.Page), int(p.Size), p.Org, p.OrgID, p.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	r := &protocol.ListAllBucketsRes{}
 	r.Bucket = bucket
-	return
+	return r, nil
 }
 
 // RetrieveBucket retrieve buckets list
-func (g *GRPCServer) RetrieveBucket(c context.Context, p *protocol.RetrieveBucketParams) (b *protocol.Bucket, err error) {
+func (g *GRPCServer) RetrieveBucket(c context.Context, p *protocol.RetrieveBucketParams) (*protocol.Bucket, error) {
 	bucket, err := g.Influx.RetrieveBucket(p.BucketID)
-	b = bucket
-	return
+	if err != nil {
+		return nil, err
+	}
+
+	return bucket, nil
 }
 
 // RetrieveBucketLog retrieve bucket operation logs
-func (g *GRPCServer) RetrieveBucketLog(c context.Context, p *protocol.RetreiveBucketLogParams) (r *protocol.RetreiveBucketLogRes, err error) {
+func (g *GRPCServer) RetrieveBucketLog(c context.Context, p *protocol.RetreiveBucketLogParams) (*protocol.RetreiveBucketLogRes, error) {
 	l, err := g.Influx.RetrieveBucketLog(p.BucketID, int(p.Page), int(p.Size))
+	if err != nil {
+		return nil, err
+	}
+
+	r := &protocol.RetreiveBucketLogRes{}
 	r.Log = l
-	return
+	return r, nil
 }
 
 // DeleteBucket delete bucket
-func (g *GRPCServer) DeleteBucket(c context.Context, p *protocol.DeleteBucketParams) (o *protocol.OpRes, err error) {
-	err = g.Influx.DeleteBucket(p.BucketID)
-	return
+func (g *GRPCServer) DeleteBucket(c context.Context, p *protocol.DeleteBucketParams) (*protocol.OpRes, error) {
+	err := g.Influx.DeleteBucket(p.BucketID)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }

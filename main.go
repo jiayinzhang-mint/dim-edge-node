@@ -10,6 +10,9 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// BuildEnv build mode (dev or prod)
+var BuildEnv string
+
 func startSocketListener() (err error) {
 
 	ssl := &tcp.SocketListener{
@@ -31,8 +34,14 @@ func startGRPCServer() (err error) {
 		Address: ":9090",
 	}
 
-	g.Influx = &store.Influx{
-		Address: os.Getenv("INFLUX_ADDRESS"),
+	if BuildEnv == "prod" {
+		g.Influx = &store.Influx{
+			Address: os.Getenv("INFLUX_ADDRESS"),
+		}
+	} else {
+		g.Influx = &store.Influx{
+			Address: "http://127.0.0.1:9999",
+		}
 	}
 
 	// connect to db
@@ -55,6 +64,7 @@ var (
 
 func main() {
 	logrus.Info("dim-edge node service starting")
+	logrus.Info("build env: " + BuildEnv)
 
 	g.Go(func() error {
 		return startGRPCServer()
