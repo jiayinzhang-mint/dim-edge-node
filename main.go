@@ -16,8 +16,7 @@ var BuildEnv string
 func startSocketListener() (err error) {
 
 	ssl := &tcp.SocketListener{
-		Address: "localhost",
-		Port:    "9000",
+		Port: "9000",
 	}
 
 	err = ssl.Listen()

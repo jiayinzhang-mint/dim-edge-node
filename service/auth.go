@@ -5,7 +5,7 @@ import (
 	"dim-edge-node/protocol"
 )
 
-// ListAuthorization list all buckets
+// ListAuthorization list all authorization
 func (g *GRPCServer) ListAuthorization(c context.Context, p *protocol.ListAuthorizationParams) (*protocol.ListAuthorizationRes, error) {
 	a := &protocol.ListAuthorizationRes{}
 	auth, err := g.Influx.ListAuthorization(p.UserID, p.User, p.OrgID, p.Org)

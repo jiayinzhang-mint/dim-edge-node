@@ -33,7 +33,7 @@ func (s *SocketListener) Listen() (err error) {
 	}
 	defer ln.Close()
 
-	logrus.Info("TCP start listening")
+	logrus.Info("dim-edge-node TCP start listening at ", s.Address, ":", s.Port)
 
 	for {
 		conn, _ := ln.AcceptTCP()
