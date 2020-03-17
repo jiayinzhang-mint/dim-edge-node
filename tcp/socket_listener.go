@@ -3,7 +3,6 @@ package tcp
 import (
 	"net"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -21,7 +20,7 @@ type SocketListener struct {
 func (s *SocketListener) Listen() (err error) {
 	var (
 		tcpAddr *net.TCPAddr
-		mutex   sync.Mutex // Mutex must be inited as an instance
+		// mutex   sync.Mutex  // Mutex must be inited as an instance
 	)
 
 	tcpAddr, _ = net.ResolveTCPAddr("tcp", s.Address+":"+s.Port)
@@ -37,7 +36,10 @@ func (s *SocketListener) Listen() (err error) {
 
 	for {
 		conn, _ := ln.AcceptTCP()
-		go s.handleRead(conn, &mutex)
+
+		logrus.Infof("Accepted con=%v, client IP=%v", conn, conn.RemoteAddr().String())
+
+		go s.handleRead(conn)
 	}
 }
 
@@ -55,13 +57,10 @@ func (s *SocketListener) keepAlive(conn *net.TCPConn) error {
 }
 
 // HandleRead read & process single data
-func (s *SocketListener) handleRead(conn *net.TCPConn, mutex *sync.Mutex) {
-	mutex.Lock()
+func (s *SocketListener) handleRead(conn *net.TCPConn) {
 
 	// Close if disconnected
 	defer conn.Close()
-
-	defer mutex.Unlock()
 
 	// Get client ip address
 	ipStr := conn.RemoteAddr().String()

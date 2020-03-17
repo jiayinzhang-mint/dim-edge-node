@@ -20,8 +20,12 @@ func TestListen(t *testing.T) {
 }
 
 func TestWrite(t *testing.T) {
+	path := "192.168.64.16:32373"
+
+	path = "127.0.0.1:9000"
+
 	// Connect to socket server
-	conn, err := net.DialTimeout("tcp", "192.168.64.14:31986", 5*time.Second)
+	conn, err := net.DialTimeout("tcp", path, 5*time.Second)
 	if err != nil {
 		logrus.Error(err)
 		os.Exit(1)
@@ -30,7 +34,30 @@ func TestWrite(t *testing.T) {
 	i := 0
 	for {
 		// Send data
-		data := "99 hello socket, this is message " + strconv.Itoa(i) + "from 1"
+		data := "99 hello socket, this is message " + strconv.Itoa(i) + " from 1"
+		i++
+		n, err := conn.Write([]byte(data))
+		logrus.Info(n, err)
+		time.Sleep(1000000 * time.Microsecond)
+	}
+}
+
+func TestWrite2(t *testing.T) {
+	path := "192.168.64.16:32373"
+
+	path = "127.0.0.1:9000"
+
+	// Connect to socket server
+	conn, err := net.DialTimeout("tcp", path, 5*time.Second)
+	if err != nil {
+		logrus.Error(err)
+		os.Exit(1)
+	}
+	defer conn.Close()
+	i := 0
+	for {
+		// Send data
+		data := "99 hello socket, this is message " + strconv.Itoa(i) + " from 2"
 		i++
 		n, err := conn.Write([]byte(data))
 		logrus.Info(n, err)
