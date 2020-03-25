@@ -20,9 +20,9 @@ func TestListen(t *testing.T) {
 }
 
 func TestWrite(t *testing.T) {
-	path := "192.168.64.16:32373"
+	path := "192.168.64.16:31276"
 
-	path = "127.0.0.1:9000"
+	// path = "127.0.0.1:9000"
 
 	// Connect to socket server
 	conn, err := net.DialTimeout("tcp", path, 5*time.Second)
@@ -38,14 +38,14 @@ func TestWrite(t *testing.T) {
 		i++
 		n, err := conn.Write([]byte(data))
 		logrus.Info(n, err)
-		time.Sleep(1000000 * time.Microsecond)
+		time.Sleep(10000 * time.Microsecond)
 	}
 }
 
 func TestWrite2(t *testing.T) {
-	path := "192.168.64.16:32373"
+	path := "192.168.64.16:31276"
 
-	path = "127.0.0.1:9000"
+	// path = "127.0.0.1:9000"
 
 	// Connect to socket server
 	conn, err := net.DialTimeout("tcp", path, 5*time.Second)
@@ -61,6 +61,6 @@ func TestWrite2(t *testing.T) {
 		i++
 		n, err := conn.Write([]byte(data))
 		logrus.Info(n, err)
-		time.Sleep(100000 * time.Microsecond)
+		time.Sleep(10000 * time.Microsecond)
 	}
 }
