@@ -12,6 +12,8 @@ service StoreService {
   // Setup
   rpc CheckSetup(google.protobuf.Empty) returns (CheckSetupRes) {}
   rpc Setup(SetupParams) returns (google.protobuf.Empty) {}
+  rpc SignIn(SignInParams) returns (google.protobuf.Empty) {}
+  rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 
   // Bucket
   rpc ListAllBuckets(ListAllBucketsParams) returns (ListAllBucketsRes) {}

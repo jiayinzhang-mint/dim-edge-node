@@ -45,3 +45,9 @@ message CreateAuthorizationParams {
   string orgID = 3;
   repeated Authorization.Permission permissions = 4;
 }
+
+// Sign in
+message SignInParams {
+  string username = 1;
+  string password = 2;
+}
