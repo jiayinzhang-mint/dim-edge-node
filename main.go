@@ -39,7 +39,7 @@ func startGRPCServer() (err error) {
 		}
 	} else {
 		g.Influx = &store.Influx{
-			Address: "http://127.0.0.1:9999",
+			Address: "http://192.168.64.16:32565",
 		}
 	}
 

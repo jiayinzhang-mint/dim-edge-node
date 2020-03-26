@@ -24,7 +24,7 @@ func TestCheckSteup(t *testing.T) {
 
 func TestSetup(t *testing.T) {
 	influx := &Influx{
-		Address: "http://127.0.0.1:9999",
+		Address: "http://192.168.64.16:32565",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {

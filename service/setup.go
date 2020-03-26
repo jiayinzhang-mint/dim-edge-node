@@ -22,6 +22,8 @@ func (g *GRPCServer) CheckSetup(ctx context.Context, in *empty.Empty) (*protocol
 
 // Setup setup db
 func (g *GRPCServer) Setup(ctx context.Context, in *protocol.SetupParams) (*empty.Empty, error) {
+	r := &empty.Empty{}
+
 	err := g.Influx.Setup(
 		in.Username,
 		in.Password,
@@ -33,5 +35,5 @@ func (g *GRPCServer) Setup(ctx context.Context, in *protocol.SetupParams) (*empt
 		return nil, err
 	}
 
-	return nil, nil
+	return r, nil
 }
