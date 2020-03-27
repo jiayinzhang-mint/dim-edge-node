@@ -7,12 +7,13 @@ import (
 
 // ListAllBuckets list all buckets
 func (g *GRPCServer) ListAllBuckets(c context.Context, p *protocol.ListAllBucketsParams) (*protocol.ListAllBucketsRes, error) {
+	r := &protocol.ListAllBucketsRes{}
+
 	bucket, err := g.Influx.ListAllBucket(int(p.Page), int(p.Size), p.Org, p.OrgID, p.Name)
 	if err != nil {
-		return nil, err
+		return r, err
 	}
 
-	r := &protocol.ListAllBucketsRes{}
 	r.Bucket = bucket
 	return r, nil
 }
@@ -21,7 +22,7 @@ func (g *GRPCServer) ListAllBuckets(c context.Context, p *protocol.ListAllBucket
 func (g *GRPCServer) RetrieveBucket(c context.Context, p *protocol.RetrieveBucketParams) (*protocol.Bucket, error) {
 	bucket, err := g.Influx.RetrieveBucket(p.BucketID)
 	if err != nil {
-		return nil, err
+		return &protocol.Bucket{}, err
 	}
 
 	return bucket, nil

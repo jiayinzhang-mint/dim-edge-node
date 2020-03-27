@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "protocol/setup.proto";
 import "protocol/bucket.proto";
 import "protocol/auth.proto";
+import "protocol/query.proto";
 
 service StoreService {
   // Setup
@@ -26,4 +27,8 @@ service StoreService {
   rpc ListAuthorization(ListAuthorizationParams)
       returns (ListAuthorizationRes) {}
   rpc CreateAuthorization(CreateAuthorizationParams) returns (Authorization) {}
+
+  // Query
+  rpc QueryData(QueryParams) returns (QueryRes) {}
+  rpc InsertData(InsertDataParams) returns (InsertDataRes) {}
 }

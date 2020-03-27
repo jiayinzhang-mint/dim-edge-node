@@ -9,7 +9,7 @@ import (
 
 // InsertData insert data
 func (i *Influx) InsertData(metrics *[]influxdb.Metric, bucket string, org string) (count int, err error) {
-	count, err = i.GetDB().Write(context.Background(), "dim-edge", "INSDIM", *metrics...)
+	count, err = i.GetDB().Write(context.Background(), bucket, org, *metrics...)
 	if err != nil {
 		logrus.Fatal(err)
 	}

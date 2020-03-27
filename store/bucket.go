@@ -43,7 +43,7 @@ func (i *Influx) RetrieveBucket(bucketID string) (bucket *protocol.Bucket, err e
 		return
 	}
 
-	if err = json.Unmarshal(res, bucket); err != nil {
+	if err = json.Unmarshal(res, &bucket); err != nil {
 		return
 	}
 
