@@ -11,6 +11,14 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		r   *protocol.QueryRes
 		err error
 	)
+
+	res, err := g.Influx.QueryData(p.QueryString, p.Org)
+
+	r = *protocol.QueryRes{
+		Row:      res.Row,
+		ColNames: res.ColNames,
+	}
+
 	return r, err
 }
 
@@ -20,5 +28,6 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 		r   *protocol.InsertDataRes
 		err error
 	)
+
 	return r, err
 }

@@ -12,9 +12,6 @@ message QueryParams {
 message QueryRes {
   repeated string row = 1;
   repeated string colNames = 2;
-  repeated string dateTypes = 3;
-  repeated bool group = 4;
-  repeated string defaultVals = 5;
 }
 
 message RowMetric {
