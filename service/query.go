@@ -3,6 +3,11 @@ package service
 import (
 	"context"
 	"dim-edge-node/protocol"
+	"dim-edge-node/utils"
+	"time"
+
+	"github.com/golang/protobuf/ptypes"
+	"github.com/influxdata/influxdb-client-go"
 )
 
 // QueryData query data
@@ -14,7 +19,7 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 
 	res, err := g.Influx.QueryData(p.QueryString, p.Org)
 
-	r = *protocol.QueryRes{
+	r = &protocol.QueryRes{
 		Row:      res.Row,
 		ColNames: res.ColNames,
 	}
@@ -25,9 +30,35 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 // InsertData insert data
 func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams) (*protocol.InsertDataRes, error) {
 	var (
-		r   *protocol.InsertDataRes
-		err error
+		m     []influxdb.Metric
+		r     *protocol.InsertDataRes
+		err   error
+		ts    time.Time
+		count int
 	)
 
+	for _, x := range p.Metrics {
+		// parse time
+		ts, err = ptypes.Timestamp(x.Ts)
+		if err != nil {
+			return r, err
+		}
+
+		// form metric
+		m = append(m, influxdb.NewRowMetric(
+			utils.StructToMap(x.Fields),
+			x.Name,
+			x.Tags,
+			ts,
+		))
+	}
+
+	// insert data
+	count, err = g.Influx.InsertData(&m, p.Bucket, p.Org)
+	if err != nil {
+		return r, err
+	}
+
+	r.Count = int64(count)
 	return r, err
 }
