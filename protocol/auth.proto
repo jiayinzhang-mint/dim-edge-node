@@ -38,6 +38,11 @@ message ListAuthorizationParams {
 
 message ListAuthorizationRes { repeated Authorization authorization = 1; }
 
+// Retrieve authorization
+message RetrieveAuthorizationParams { string authID = 1; }
+
+message RetrieveAuthorizationRes { Authorization authorization = 1; }
+
 // Create authorization
 message CreateAuthorizationParams {
   string status = 1;
@@ -50,4 +55,12 @@ message CreateAuthorizationParams {
 message SignInParams {
   string username = 1;
   string password = 2;
+}
+
+// Get me
+message Me {
+  string name = 1;
+  string id = 2;
+  string oauthID = 3;
+  string status = 4;
 }

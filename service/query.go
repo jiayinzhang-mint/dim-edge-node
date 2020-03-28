@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"dim-edge-node/protocol"
-	"dim-edge-node/utils"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -44,9 +43,14 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 			return r, err
 		}
 
+		fields := make(map[string]interface{})
+		for k, y := range x.Fields {
+			fields[k] = interface{}(y)
+		}
+
 		// form metric
 		m = append(m, influxdb.NewRowMetric(
-			utils.StructToMap(x.Fields),
+			fields,
 			x.Name,
 			x.Tags,
 			ts,

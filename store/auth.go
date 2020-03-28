@@ -66,6 +66,17 @@ func (i *Influx) ListAuthorization(userID string, user string, orgID string, org
 	return
 }
 
+// RetrieveAuthorization retrive one authorization with authID
+func (i *Influx) RetrieveAuthorization(authID string) (auth *protocol.Authorization, err error) {
+	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/authorizations", map[string]string{
+		"authID": authID,
+	}, nil)
+
+	err = json.Unmarshal(res, &auth)
+
+	return
+}
+
 // CreateAuthorization create authorization
 func (i *Influx) CreateAuthorization(status string, description string, orgID string, p []*protocol.Authorization_Permission) (auth *protocol.Authorization, err error) {
 	a := protocol.Authorization{
@@ -93,4 +104,9 @@ func (i *Influx) CreateAuthorization(status string, description string, orgID st
 	err = json.Unmarshal(res, &auth)
 
 	return
+}
+
+// Me get my info after signing in
+func (i *Influx) Me() (err error) {
+
 }

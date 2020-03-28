@@ -82,3 +82,20 @@ func TestCreateAuthorization(*testing.T) {
 	res, err := influx.CreateAuthorization("active", "testbiu", "a9a72b93088f4c8f", p)
 	logrus.Info(res, err)
 }
+
+func TestRetrieveAuthorizaiton(*testing.T) {
+	influx := &Influx{
+		Address: "http://127.0.0.1:9999",
+	}
+
+	if err := influx.ConnectToDB(); err != nil {
+		logrus.Error(err)
+	}
+
+	// Sign in first
+	lErr := influx.SignIn("mint", "131001250115zHzH")
+	if lErr != nil {
+		logrus.Error(lErr)
+	}
+
+}

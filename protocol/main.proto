@@ -27,6 +27,9 @@ service StoreService {
   rpc ListAuthorization(ListAuthorizationParams)
       returns (ListAuthorizationRes) {}
   rpc CreateAuthorization(CreateAuthorizationParams) returns (Authorization) {}
+  rpc RetrieveAuthorization(RetrieveAuthorizationParams)
+      returns (Authorization) {}
+  rpc GetMe(google.protobuf.Empty) returns (Me) {}
 
   // Query
   rpc QueryData(QueryParams) returns (QueryRes) {}
