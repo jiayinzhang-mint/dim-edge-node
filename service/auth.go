@@ -29,6 +29,16 @@ func (g *GRPCServer) CreateAuthorization(c context.Context, p *protocol.CreateAu
 	return auth, err
 }
 
+// RetrieveAuthorization retrieve authorization
+func (g *GRPCServer) RetrieveAuthorization(c context.Context, p *protocol.RetrieveAuthorizationParams) (*protocol.Authorization, error) {
+	var (
+		auth *protocol.Authorization
+		err  error
+	)
+
+	return auth, err
+}
+
 // SignIn sign in to influxdb
 func (g *GRPCServer) SignIn(c context.Context, p *protocol.SignInParams) (*empty.Empty, error) {
 	var (
@@ -55,4 +65,14 @@ func (g *GRPCServer) SignOut(c context.Context, p *empty.Empty) (*empty.Empty, e
 	}
 
 	return &empty.Empty{}, nil
+}
+
+// GetMe get my info after signin in
+func (g *GRPCServer) GetMe(c context.Context, p *empty.Empty) (*protocol.Me, error) {
+	var (
+		m   *protocol.Me
+		err error
+	)
+
+	return m, err
 }

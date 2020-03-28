@@ -41,8 +41,6 @@ message ListAuthorizationRes { repeated Authorization authorization = 1; }
 // Retrieve authorization
 message RetrieveAuthorizationParams { string authID = 1; }
 
-message RetrieveAuthorizationRes { Authorization authorization = 1; }
-
 // Create authorization
 message CreateAuthorizationParams {
   string status = 1;
