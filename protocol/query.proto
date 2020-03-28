@@ -15,7 +15,7 @@ message QueryRes {
 }
 
 message RowMetric {
-  map<string, int64> fields = 1;
+  map<string, double> fields = 1;
   string name = 2;
   map<string, string> tags = 3;
   google.protobuf.Timestamp ts = 4;
