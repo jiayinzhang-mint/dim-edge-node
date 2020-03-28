@@ -36,6 +36,8 @@ func (g *GRPCServer) RetrieveAuthorization(c context.Context, p *protocol.Retrie
 		err  error
 	)
 
+	auth, err = g.Influx.RetrieveAuthorization(p.AuthID)
+
 	return auth, err
 }
 
@@ -73,6 +75,8 @@ func (g *GRPCServer) GetMe(c context.Context, p *empty.Empty) (*protocol.Me, err
 		m   *protocol.Me
 		err error
 	)
+
+	m, err = g.Influx.GetMe()
 
 	return m, err
 }

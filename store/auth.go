@@ -106,7 +106,11 @@ func (i *Influx) CreateAuthorization(status string, description string, orgID st
 	return
 }
 
-// Me get my info after signing in
-func (i *Influx) Me() (err error) {
+// GetMe get my info after signing in
+func (i *Influx) GetMe() (me *protocol.Me, err error) {
+	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/me", map[string]string{}, nil)
 
+	err = json.Unmarshal(res, &me)
+
+	return
 }
