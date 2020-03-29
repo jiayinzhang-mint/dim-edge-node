@@ -18,7 +18,6 @@ func (i *Influx) CheckSetup() (msg bool, err error) {
 	var resBody map[string]interface{}
 	json.Unmarshal(res, &resBody)
 
-	logrus.Info(resBody["allowed"])
 	if resBody["allowed"] == true {
 		logrus.Info("Influx has NOT been setup")
 		msg = true

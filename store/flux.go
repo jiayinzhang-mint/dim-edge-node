@@ -47,7 +47,7 @@ func (i *Influx) ConnectToDB() (err error) {
 		return
 	}
 
-	logrus.Info(setup)
+	logrus.Info("Influx setup status: ", setup)
 
 	return
 }

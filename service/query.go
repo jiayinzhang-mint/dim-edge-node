@@ -14,20 +14,23 @@ import (
 // QueryData query data
 func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*protocol.QueryRes, error) {
 	var (
-		r   *protocol.QueryRes
+		r   = &protocol.QueryRes{}
 		err error
 	)
 
 	result, err := g.Influx.QueryData(p.QueryString, p.Org)
+	if err != nil {
+		return r, err
+	}
 
-	var record *protocol.Record
+	var record protocol.Record
 	for result.Next() {
 		mErr := result.Unmarshal(&record)
 		if mErr != nil {
 			logrus.Error(mErr)
 		}
 
-		r.Record = append(r.Record, record)
+		r.Record = append(r.Record, &record)
 	}
 
 	return r, err
@@ -37,7 +40,7 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams) (*protocol.InsertDataRes, error) {
 	var (
 		m     []influxdb.Metric
-		r     *protocol.InsertDataRes
+		r     = &protocol.InsertDataRes{}
 		err   error
 		ts    time.Time
 		count int
@@ -50,6 +53,7 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 			return r, err
 		}
 
+		// convert map[string]any to map[string]interface
 		fields := make(map[string]interface{})
 		var fieldsInterface interface{}
 		for y, f := range x.Fields {
@@ -72,9 +76,7 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 		return r, err
 	}
 
-	r = &protocol.InsertDataRes{
-		Count: int64(count),
-	}
+	r.Count = int64(count)
 
 	return r, err
 }

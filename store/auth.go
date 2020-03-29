@@ -47,10 +47,10 @@ func (i *Influx) SignIn(username string, password string) (err error) {
 			logrus.Error("Failed to create native influx client")
 			return
 		}
-		logrus.Info("Created native influx client")
+		logrus.Info("Native Influx client created")
 	}
 
-	logrus.Info("Cached influx user token")
+	logrus.Info("Influx user token cached")
 
 	return
 }
