@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"dim-edge-node/protocol"
+	"encoding/json"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -50,8 +51,10 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 		}
 
 		fields := make(map[string]interface{})
-		for k, y := range x.Fields {
-			fields[k] = interface{}(y)
+		var fieldsInterface interface{}
+		for y, f := range x.Fields {
+			json.Unmarshal(f.Value, &fieldsInterface)
+			fields[y] = fieldsInterface
 		}
 
 		// form metric
