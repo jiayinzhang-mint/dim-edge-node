@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/influxdata/influxdb-client-go"
+	"github.com/sirupsen/logrus"
 )
 
 // QueryData query data
@@ -16,11 +17,16 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		err error
 	)
 
-	res, err := g.Influx.QueryData(p.QueryString, p.Org)
+	result, err := g.Influx.QueryData(p.QueryString, p.Org)
 
-	r = &protocol.QueryRes{
-		Row:      res.Row,
-		ColNames: res.ColNames,
+	var record *protocol.Record
+	for result.Next() {
+		mErr := result.Unmarshal(&record)
+		if mErr != nil {
+			logrus.Error(mErr)
+		}
+
+		r.Record = append(r.Record, record)
 	}
 
 	return r, err

@@ -9,10 +9,13 @@ message QueryParams {
   string org = 2;
 }
 
-message QueryRes {
-  repeated string row = 1;
-  repeated string colNames = 2;
+message Record {
+  string zone = 1;
+  string date = 2;
+  string count = 3;
 }
+
+message QueryRes { repeated Record record = 1; }
 
 message RowMetric {
   map<string, double> fields = 1;
