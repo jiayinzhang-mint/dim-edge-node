@@ -63,6 +63,9 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 		return r, err
 	}
 
-	r.Count = int64(count)
+	r = &protocol.InsertDataRes{
+		Count: int64(count),
+	}
+
 	return r, err
 }

@@ -12,9 +12,13 @@ import (
 
 // SignIn sign into db
 func (i *Influx) SignIn(username string, password string) (err error) {
+	var (
+		basicAuth string
+		auth      []*protocol.Authorization
+	)
 
 	// Generate basic auth
-	basicAuth := func() string {
+	basicAuth = func() string {
 		auth := username + ":" + password
 		return base64.StdEncoding.EncodeToString([]byte(auth))
 	}()
@@ -29,6 +33,24 @@ func (i *Influx) SignIn(username string, password string) (err error) {
 	}
 
 	logrus.Info("Influx HTTP Client signed in")
+
+	if auth, err = i.ListAuthorization("", username, "", ""); err != nil {
+		logrus.Error("Faield to get authorization")
+	}
+
+	if len(auth) >= 1 {
+		i.Token = auth[0].GetToken()
+	}
+
+	if i.DBClient == nil {
+		if err = i.CreateDBClient(); err != nil {
+			logrus.Error("Failed to create native influx client")
+			return
+		}
+		logrus.Info("Created native influx client")
+	}
+
+	logrus.Info("Cached influx user token")
 
 	return
 }

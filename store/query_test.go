@@ -10,26 +10,30 @@ import (
 
 func TestInsertData(*testing.T) {
 	influx := &Influx{
-		Address: "http://127.0.0.1:9999",
-		Token:   "OmtoG5-MWHplbyT0QS2-HoDyfKAUpbYkkXf_W3nYDqwZe631h-NRGygJoEFyUeVxXknTewpOwa97A-q0BCI3eg==",
+		Address: "http://192.168.64.16:32565",
 	}
+	if err := influx.ConnectToDB(); err != nil {
+		logrus.Error(err)
+	}
+
+	influx.SignIn("mint", "131001250115zHzH")
 	if err := influx.ConnectToDB(); err != nil {
 		logrus.Error(err)
 	}
 
 	c, err := influx.InsertData(&[]influxdb.Metric{
 		influxdb.NewRowMetric(
-			map[string]interface{}{"memory": 1000, "cpu": 0.93},
+			map[string]interface{}{"memory": 1000.0, "cpu": 0.93},
 			"system-metrics",
 			map[string]string{"hostname": "hal9000"},
 			time.Now().Local(),
 		),
 		influxdb.NewRowMetric(
-			map[string]interface{}{"memory": 1000, "cpu": 0.93},
+			map[string]interface{}{"memory": 1000.0, "cpu": 0.93},
 			"system-metrics",
 			map[string]string{"hostname": "hal9000"},
 			time.Now().Local(),
-		)}, "dim-edge", "INSDIM")
+		)}, "insdim", "insdim")
 
 	logrus.Info(c, err)
 }
