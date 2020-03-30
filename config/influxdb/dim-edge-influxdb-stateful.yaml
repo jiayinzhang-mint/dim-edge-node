@@ -27,7 +27,7 @@ spec:
         io.kompose.service: dim-edge-influxdb
     spec:
       containers:
-        - image: quay.io/influxdb/influxdb:2.0.0-beta
+        - image: quay.azk8s.cn/influxdb/influxdb:2.0.0-beta
           imagePullPolicy: ''
           name: dim-edge-influxdb
           ports:
