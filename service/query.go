@@ -31,14 +31,15 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		Count  float64   `flux:"_value" json:"count"`
 	}
 
-	var rec *influxRecord
+	r.Record = make([]*protocol.Record, 0)
+
+	var rec influxRecord
 	for result.Next() {
-		mErr := result.Unmarshal(rec)
+		mErr := result.Unmarshal(&rec)
 		logrus.Info(rec)
 
 		ts, _ := ptypes.TimestampProto(rec.Time)
 		r.Record = append(r.Record, &protocol.Record{
-			Zone:  ***rec.Zone,
 			Time:  ts,
 			Count: rec.Count,
 		})
