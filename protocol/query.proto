@@ -3,7 +3,6 @@ syntax = "proto3";
 package protocol;
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/any.proto";
 
 message QueryParams {
   string queryString = 1;
@@ -12,14 +11,14 @@ message QueryParams {
 
 message Record {
   string zone = 1;
-  string date = 2;
-  string count = 3;
+  google.protobuf.Timestamp time = 2;
+  double count = 3;
 }
 
 message QueryRes { repeated Record record = 1; }
 
 message RowMetric {
-  map<string, google.protobuf.Any> fields = 1;
+  map<string, double> fields = 1;
   string name = 2;
   map<string, string> tags = 3;
   google.protobuf.Timestamp ts = 4;

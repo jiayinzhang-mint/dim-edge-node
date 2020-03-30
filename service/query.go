@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"dim-edge-node/protocol"
-	"encoding/json"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -23,14 +22,29 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		return r, err
 	}
 
-	var record protocol.Record
+	type influxRecord struct {
+		Zone   ***string `flux:"name" json:"zone"`
+		Stop   time.Time `flux:"_stop" json:"-"`
+		Start  time.Time `flux:"_start" json:"-"`
+		Time   time.Time `flux:"_time" json:"date"`
+		HostIP string    `flux:"host_ip" json:"-"`
+		Count  float64   `flux:"_value" json:"count"`
+	}
+
+	var rec *influxRecord
 	for result.Next() {
-		mErr := result.Unmarshal(&record)
+		mErr := result.Unmarshal(rec)
+		logrus.Info(rec)
+
+		ts, _ := ptypes.TimestampProto(rec.Time)
+		r.Record = append(r.Record, &protocol.Record{
+			Zone:  ***rec.Zone,
+			Time:  ts,
+			Count: rec.Count,
+		})
 		if mErr != nil {
 			logrus.Error(mErr)
 		}
-
-		r.Record = append(r.Record, &record)
 	}
 
 	return r, err
@@ -53,12 +67,11 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 			return r, err
 		}
 
-		// convert map[string]any to map[string]interface
+		// convert map[string]float64 to map[string]interface
 		fields := make(map[string]interface{})
-		var fieldsInterface interface{}
+
 		for y, f := range x.Fields {
-			json.Unmarshal(f.Value, &fieldsInterface)
-			fields[y] = fieldsInterface
+			fields[y] = interface{}(f)
 		}
 
 		// form metric
