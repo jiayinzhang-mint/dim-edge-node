@@ -20,8 +20,7 @@ func TestListen(t *testing.T) {
 }
 
 func TestWrite(t *testing.T) {
-	path := "192.168.64.16:31276"
-
+	path := "192.168.64.18:32074"
 	// path = "127.0.0.1:9000"
 
 	// Connect to socket server
@@ -43,8 +42,7 @@ func TestWrite(t *testing.T) {
 }
 
 func TestWrite2(t *testing.T) {
-	path := "192.168.64.16:31276"
-
+	path := "192.168.64.18:32074"
 	// path = "127.0.0.1:9000"
 
 	// Connect to socket server

@@ -31,13 +31,15 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		Count  float64   `flux:"_value" json:"count"`
 	}
 
+	// init a unknown-length array
 	r.Record = make([]*protocol.Record, 0)
 
+	// decode res with flux tag
 	var rec influxRecord
 	for result.Next() {
 		mErr := result.Unmarshal(&rec)
-		logrus.Info(rec)
 
+		// convert into proto format
 		ts, _ := ptypes.TimestampProto(rec.Time)
 		r.Record = append(r.Record, &protocol.Record{
 			Time:  ts,
@@ -45,6 +47,7 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		})
 		if mErr != nil {
 			logrus.Error(mErr)
+			return r, mErr
 		}
 	}
 
