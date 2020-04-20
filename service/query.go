@@ -3,12 +3,25 @@ package service
 import (
 	"context"
 	"dim-edge-node/protocol"
+	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/influxdata/influxdb-client-go"
-	"github.com/sirupsen/logrus"
+	influxdb2 "github.com/influxdata/influxdb-client-go"
 )
+
+var floatType = reflect.TypeOf(float64(0))
+
+func getFloat(unk interface{}) (float64, error) {
+	v := reflect.ValueOf(unk)
+	v = reflect.Indirect(v)
+	if !v.Type().ConvertibleTo(floatType) {
+		return 0, fmt.Errorf("cannot convert %v to float64", v.Type())
+	}
+	fv := v.Convert(floatType)
+	return fv.Float(), nil
+}
 
 // QueryData query data
 func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*protocol.QueryRes, error) {
@@ -22,33 +35,24 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 		return r, err
 	}
 
-	type influxRecord struct {
-		Zone   ***string `flux:"name" json:"zone"`
-		Stop   time.Time `flux:"_stop" json:"-"`
-		Start  time.Time `flux:"_start" json:"-"`
-		Time   time.Time `flux:"_time" json:"date"`
-		HostIP string    `flux:"host_ip" json:"-"`
-		Count  float64   `flux:"_value" json:"count"`
-	}
-
 	// init a unknown-length array
 	r.Record = make([]*protocol.Record, 0)
 
-	// decode res with flux tag
-	var rec influxRecord
+	// decode res with flux tags
 	for result.Next() {
-		mErr := result.Unmarshal(&rec)
+
+		value, err := getFloat(result.Record().Value())
+		if err != nil {
+			return r, err
+		}
 
 		// convert into proto format
-		ts, _ := ptypes.TimestampProto(rec.Time)
+		ts, _ := ptypes.TimestampProto(result.Record().Time())
 		r.Record = append(r.Record, &protocol.Record{
 			Time:  ts,
-			Count: rec.Count,
+			Count: value,
 		})
-		if mErr != nil {
-			logrus.Error(mErr)
-			return r, mErr
-		}
+
 	}
 
 	return r, err
@@ -57,7 +61,7 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 // InsertData insert data
 func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams) (*protocol.InsertDataRes, error) {
 	var (
-		m     []influxdb.Metric
+		m     []*influxdb2.Point
 		r     = &protocol.InsertDataRes{}
 		err   error
 		ts    time.Time
@@ -73,22 +77,21 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 
 		// convert map[string]float64 to map[string]interface
 		fields := make(map[string]interface{})
-
 		for y, f := range x.Fields {
 			fields[y] = interface{}(f)
 		}
 
 		// form metric
-		m = append(m, influxdb.NewRowMetric(
-			fields,
+		m = append(m, influxdb2.NewPoint(
 			x.Name,
 			x.Tags,
+			fields,
 			ts,
 		))
 	}
 
 	// insert data
-	count, err = g.Influx.InsertData(&m, p.Bucket, p.Org)
+	err = g.Influx.InsertData(m, p.Bucket, p.Org)
 	if err != nil {
 		return r, err
 	}

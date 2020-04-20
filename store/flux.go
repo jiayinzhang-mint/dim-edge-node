@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/influxdata/influxdb-client-go"
+	influxdb2 "github.com/influxdata/influxdb-client-go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,13 +13,13 @@ import (
 type Influx struct {
 	Address      string `json:"address"`
 	Token        string `json:"token"`
-	DBClient     *influxdb.Client
+	DBClient     influxdb2.InfluxDBClient
 	HTTPClient   *http.Client        // http client for operation
 	HTTPInstance *utils.HTTPInstance // http instance for session store
 }
 
 // GetDB return db instance
-func (i *Influx) GetDB() *influxdb.Client {
+func (i *Influx) GetDB() influxdb2.InfluxDBClient {
 	return i.DBClient
 }
 
@@ -55,7 +55,7 @@ func (i *Influx) ConnectToDB() (err error) {
 // CreateDBClient create db native client
 func (i *Influx) CreateDBClient() (err error) {
 	// Create db clients
-	i.DBClient, err = influxdb.New(i.Address, i.Token, influxdb.WithHTTPClient(i.HTTPClient))
+	i.DBClient = influxdb2.NewClient(i.Address, i.Token)
 
 	if err != nil {
 		logrus.Error(err)
