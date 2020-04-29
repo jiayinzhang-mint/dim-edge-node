@@ -20,8 +20,8 @@ func TestListen(t *testing.T) {
 }
 
 func TestWrite(t *testing.T) {
-	path := "192.168.64.18:32074"
-	// path = "127.0.0.1:9000"
+	// path := "192.168.64.18:32074"
+	path := "127.0.0.1:9000"
 
 	// Connect to socket server
 	conn, err := net.DialTimeout("tcp", path, 5*time.Second)
@@ -35,15 +35,14 @@ func TestWrite(t *testing.T) {
 		// Send data
 		data := "99 hello socket, this is message " + strconv.Itoa(i) + " from 1"
 		i++
-		n, err := conn.Write([]byte(data))
-		logrus.Info(n, err)
-		time.Sleep(10000 * time.Microsecond)
+		_, _ = conn.Write([]byte(data))
+		time.Sleep(1000 * time.Microsecond)
 	}
 }
 
 func TestWrite2(t *testing.T) {
 	path := "192.168.64.18:32074"
-	// path = "127.0.0.1:9000"
+	path = "127.0.0.1:9000"
 
 	// Connect to socket server
 	conn, err := net.DialTimeout("tcp", path, 5*time.Second)

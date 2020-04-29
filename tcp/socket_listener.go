@@ -37,8 +37,6 @@ func (s *SocketListener) Listen() (err error) {
 	for {
 		conn, _ := ln.AcceptTCP()
 
-		logrus.Infof("Accepted con=%v, client IP=%v", conn, conn.RemoteAddr().String())
-
 		go s.handleRead(conn)
 	}
 }
@@ -58,6 +56,7 @@ func (s *SocketListener) keepAlive(conn *net.TCPConn) error {
 
 // HandleRead read & process single data
 func (s *SocketListener) handleRead(conn *net.TCPConn) {
+	start := time.Now()
 
 	// Close if disconnected
 	defer conn.Close()
@@ -71,22 +70,17 @@ func (s *SocketListener) handleRead(conn *net.TCPConn) {
 		length, readErr := conn.Read(buffer)
 
 		if readErr != nil {
-			logrus.Info("Read message error", readErr)
+			logrus.Info(time.Now().Sub(start), " Read message error ", readErr)
 			break
 		}
 
-		if length > 12 {
-			data := buffer[:length]
-			dataStr := strings.TrimSpace(string(data))
+		data := buffer[:length]
 
-			in := strings.Split(dataStr, " ")
-
-			if in[0] == "99" {
-				logrus.Info("Received message from ", ipStr, ", Content: ", dataStr, ", Length: ", length)
-			}
-
-			conn.Write(data)
+		if strings.HasPrefix(string(data), "99") {
+			logrus.Info("Received message from ", ipStr, ", Content: ", string(data), ", Length: ", length)
 		}
+
+		conn.Write(data)
 
 	}
 }

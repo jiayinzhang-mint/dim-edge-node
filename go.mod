@@ -5,7 +5,6 @@ go 1.13
 require (
 	github.com/golang/protobuf v1.4.0
 	github.com/influxdata/influxdb-client-go v1.0.0
-	github.com/influxdata/line-protocol v0.0.0-20200327222509-2487e7298839
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/sirupsen/logrus v1.5.0
 	golang.org/x/net v0.0.0-20200202094626-16171245cfb2 // indirect

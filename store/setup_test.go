@@ -8,7 +8,7 @@ import (
 
 func TestCheckSteup(t *testing.T) {
 	influx := &Influx{
-		Address: "http://192.168.64.14:30762",
+		Address: "http://192.168.64.18:31048",
 	}
 
 	if err := influx.ConnectToDB(); err != nil {
