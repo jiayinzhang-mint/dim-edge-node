@@ -30,10 +30,10 @@ spec:
           ports:
             - containerPort: 9090
             - containerPort: 9000
-          resources:
-            limits:
-              cpu: '10m'
-              memory: '20Mi'
+          # resources:
+          #   limits:
+          #     cpu: '10m'
+          #     memory: '20Mi'
           env:
             - name: INFLUX_ADDRESS
               value: http://dim-edge-influxdb-0:9999
