@@ -1,15 +1,15 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: dim-edge-node
+  name: dim-edge/node
   namespace: default
   labels:
-    io.kompose.service: dim-edge-node
+    io.kompose.service: dim-edge/node
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: dim-edge-node
+    name: dim-edge/node
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 50

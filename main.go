@@ -1,9 +1,9 @@
 package main
 
 import (
-	"dim-edge-node/service"
-	"dim-edge-node/store"
-	"dim-edge-node/tcp"
+	"dim-edge/node/service"
+	"dim-edge/node/store"
+	"dim-edge/node/tcp"
 	"os"
 
 	"github.com/sirupsen/logrus"

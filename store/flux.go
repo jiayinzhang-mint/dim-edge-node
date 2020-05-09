@@ -1,7 +1,7 @@
 package store
 
 import (
-	"dim-edge-node/utils"
+	"dim-edge/node/utils"
 	"net/http"
 	"time"
 

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"dim-edge-node/protocol"
+	"dim-edge/node/protocol"
 )
 
 // ListAllBuckets list all buckets

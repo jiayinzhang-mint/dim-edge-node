@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  dim-edge-influxdb:
+  dim-edge/influxdb:
     container_name: dim-edge-influxdb
     image: quay.io/influxdb/influxdb:2.0.0-beta
     ports:

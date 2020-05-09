@@ -1,7 +1,7 @@
 package store
 
 import (
-	"dim-edge-node/protocol"
+	"dim-edge/node/protocol"
 	"testing"
 
 	"github.com/sirupsen/logrus"

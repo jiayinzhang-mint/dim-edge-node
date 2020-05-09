@@ -1,8 +1,8 @@
 package service
 
 import (
-	"dim-edge-node/protocol"
-	"dim-edge-node/store"
+	"dim-edge/node/protocol"
+	"dim-edge/node/store"
 	"log"
 	"net"
 

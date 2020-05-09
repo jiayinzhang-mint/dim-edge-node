@@ -1,6 +1,6 @@
-module dim-edge-node
+module dim-edge/node
 
-go 1.13
+go 1.14
 
 require (
 	github.com/golang/protobuf v1.4.1

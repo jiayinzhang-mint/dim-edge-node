@@ -5,8 +5,8 @@ LABEL key="MINT"
 RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
-RUN mkdir /dim-edge-node
-WORKDIR /dim-edge-node
+RUN mkdir /dim-edge/node
+WORKDIR /dim-edge/node
 COPY go.mod .
 COPY go.sum .
 

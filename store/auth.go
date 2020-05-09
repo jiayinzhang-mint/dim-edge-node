@@ -1,8 +1,8 @@
 package store
 
 import (
-	"dim-edge-node/protocol"
-	"dim-edge-node/utils"
+	"dim-edge/node/protocol"
+	"dim-edge/node/utils"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
