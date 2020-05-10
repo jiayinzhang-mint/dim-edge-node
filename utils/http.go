@@ -17,6 +17,7 @@ type HTTPInstance struct {
 
 // Get do GET request
 func (h *HTTPInstance) Get(c *http.Client, url string, params map[string]string, header map[string]string) ([]byte, error) {
+
 	// Form request string
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

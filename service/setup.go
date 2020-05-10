@@ -9,6 +9,7 @@ import (
 
 // CheckSetup check if db has been setup
 func (g *GRPCServer) CheckSetup(ctx context.Context, in *empty.Empty) (*protocol.CheckSetupRes, error) {
+
 	setup, err := g.Influx.CheckSetup()
 	if err != nil {
 		return nil, err

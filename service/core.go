@@ -3,6 +3,7 @@ package service
 import (
 	"dim-edge/node/protocol"
 	"dim-edge/node/store"
+	"io"
 	"log"
 	"net"
 	"time"
@@ -18,9 +19,10 @@ import (
 
 // GRPCServer instance
 type GRPCServer struct {
-	Address string `json:"address"`
-	Influx  *store.Influx
-	Tracer  ot.Tracer
+	Address     string `json:"address"`
+	Influx      *store.Influx
+	Tracer      ot.Tracer
+	TraceCloser io.Closer
 }
 
 // StartServer start server
@@ -29,6 +31,7 @@ func (g *GRPCServer) StartServer() (err error) {
 
 	// init a new tracer
 	jcfg := jaegercfg.Configuration{
+		ServiceName: "dim-edge-node",
 		Sampler: &jaegercfg.SamplerConfig{
 			Type:  "const",
 			Param: 1,
@@ -39,8 +42,7 @@ func (g *GRPCServer) StartServer() (err error) {
 		},
 	}
 
-	g.Tracer, _, err = jcfg.New(
-		"dim-edge-node",
+	g.Tracer, g.TraceCloser, err = jcfg.NewTracer(
 		jaegercfg.Logger(jaeger.StdLogger),
 	)
 	if err != nil {

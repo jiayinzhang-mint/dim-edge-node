@@ -38,8 +38,6 @@ func (i *Influx) ConnectToDB() (err error) {
 	// Create http instance
 	i.HTTPInstance = &utils.HTTPInstance{}
 
-	logrus.Info("Influx DB connected")
-
 	// Check setup
 	setup, err := i.CheckSetup()
 	if err != nil {
@@ -47,6 +45,7 @@ func (i *Influx) ConnectToDB() (err error) {
 		return
 	}
 
+	logrus.Info("Influx DB connected")
 	logrus.Info("Influx setup status: ", setup)
 
 	return
