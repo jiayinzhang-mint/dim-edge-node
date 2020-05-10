@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sirupsen/logrus"
@@ -15,7 +16,7 @@ func TestCheckSteup(t *testing.T) {
 		logrus.Error(err)
 	}
 
-	msg, err := influx.CheckSetup()
+	msg, err := influx.CheckSetup(context.TODO())
 	if err != nil {
 		logrus.Info(err)
 	}

@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"dim-edge/node/protocol"
 	"dim-edge/node/utils"
 	"encoding/base64"
@@ -68,7 +69,7 @@ func (i *Influx) SignOut() (err error) {
 
 // ListAuthorization list all authorizations
 func (i *Influx) ListAuthorization(userID string, user string, orgID string, org string) (auth []*protocol.Authorization, err error) {
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/authorizations", map[string]string{
+	res, err := i.HTTPInstance.Get(context.TODO(), i.HTTPClient, i.GetBasicURL()+"/authorizations", map[string]string{
 		"user":   user,
 		"userID": userID,
 		"orgID":  orgID,
@@ -90,7 +91,7 @@ func (i *Influx) ListAuthorization(userID string, user string, orgID string, org
 
 // RetrieveAuthorization retrive one authorization with authID
 func (i *Influx) RetrieveAuthorization(authID string) (auth *protocol.Authorization, err error) {
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/authorizations", map[string]string{
+	res, err := i.HTTPInstance.Get(context.TODO(), i.HTTPClient, i.GetBasicURL()+"/authorizations", map[string]string{
 		"authID": authID,
 	}, nil)
 
@@ -130,7 +131,7 @@ func (i *Influx) CreateAuthorization(status string, description string, orgID st
 
 // GetMe get my info after signing in
 func (i *Influx) GetMe() (me *protocol.Me, err error) {
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/me", map[string]string{}, nil)
+	res, err := i.HTTPInstance.Get(context.TODO(), i.HTTPClient, i.GetBasicURL()+"/me", map[string]string{}, nil)
 
 	err = json.Unmarshal(res, &me)
 

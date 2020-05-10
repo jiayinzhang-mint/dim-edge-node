@@ -2,27 +2,49 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
+	otlog "github.com/opentracing/opentracing-go/log"
 	"github.com/sirupsen/logrus"
 )
 
 // HTTPInstance http instance
 type HTTPInstance struct {
-	Cookies []*http.Cookie
+	Cookies     []*http.Cookie
+	Tracer      opentracing.Tracer
+	TraceCloser io.Closer
 }
 
 // Get do GET request
-func (h *HTTPInstance) Get(c *http.Client, url string, params map[string]string, header map[string]string) ([]byte, error) {
+func (h *HTTPInstance) Get(ctx context.Context, c *http.Client, url string, params map[string]string, header map[string]string) ([]byte, error) {
+	var parentCtx opentracing.SpanContext
+
+	parentSpan := opentracing.SpanFromContext(ctx)
+	if parentSpan != nil {
+		parentCtx = parentSpan.Context()
+	}
+
+	span := opentracing.StartSpan(
+		url,
+		opentracing.ChildOf(parentCtx),
+	)
+	defer span.Finish()
 
 	// Form request string
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
+
+	// Implement tracer context
+	req = req.WithContext(opentracing.ContextWithSpan(context.Background(), span))
 
 	// Query params
 	q := req.URL.Query()
@@ -47,6 +69,8 @@ func (h *HTTPInstance) Get(c *http.Client, url string, params map[string]string,
 	// Send request
 	res, resErr := c.Do(req)
 	if resErr != nil {
+		span.SetTag(string(ext.Error), true)
+		span.LogKV(otlog.Error(err))
 		return nil, resErr
 	}
 	defer res.Body.Close()

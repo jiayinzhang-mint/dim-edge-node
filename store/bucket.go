@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"dim-edge/node/protocol"
 	"encoding/json"
 	"strconv"
@@ -13,7 +14,7 @@ func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, nam
 	offsetStr := strconv.Itoa(offset)
 	sizeStr := strconv.Itoa(size)
 
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/buckets", map[string]string{
+	res, err := i.HTTPInstance.Get(context.TODO(), i.HTTPClient, i.GetBasicURL()+"/buckets", map[string]string{
 		"offset": offsetStr,
 		"limit":  sizeStr,
 		"org":    org,
@@ -38,7 +39,7 @@ func (i *Influx) ListAllBucket(page int, size int, org string, orgID string, nam
 
 // RetrieveBucket retrieve a bucket by id
 func (i *Influx) RetrieveBucket(bucketID string) (bucket *protocol.Bucket, err error) {
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/buckets/"+bucketID, nil, nil)
+	res, err := i.HTTPInstance.Get(context.TODO(), i.HTTPClient, i.GetBasicURL()+"/buckets/"+bucketID, nil, nil)
 	if err != nil {
 		return
 	}
@@ -57,7 +58,7 @@ func (i *Influx) RetrieveBucketLog(bucketID string, page int, size int) (log []*
 	offsetStr := strconv.Itoa(offset)
 	sizeStr := strconv.Itoa(size)
 
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/buckets/"+bucketID+"/logs", map[string]string{
+	res, err := i.HTTPInstance.Get(context.TODO(), i.HTTPClient, i.GetBasicURL()+"/buckets/"+bucketID+"/logs", map[string]string{
 		"offset": offsetStr,
 		"limit":  sizeStr,
 	}, nil)

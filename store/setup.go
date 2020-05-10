@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -8,9 +9,9 @@ import (
 )
 
 // CheckSetup Check if database has default user, org, bucket
-func (i *Influx) CheckSetup() (msg bool, err error) {
+func (i *Influx) CheckSetup(ctx context.Context) (msg bool, err error) {
 	// Form request strinsg
-	res, err := i.HTTPInstance.Get(i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
+	res, err := i.HTTPInstance.Get(ctx, i.HTTPClient, i.GetBasicURL()+"/setup", nil, nil)
 	if err != nil {
 		return
 	}
