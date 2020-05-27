@@ -17,13 +17,13 @@ import (
 type Influx struct {
 	Address      string `json:"address"`
 	Token        string `json:"token"`
-	DBClient     influxdb2.InfluxDBClient
+	DBClient     influxdb2.Client
 	HTTPClient   *http.Client        // http client for operation
 	HTTPInstance *utils.HTTPInstance // http instance for session store
 }
 
 // GetDB return db instance
-func (i *Influx) GetDB() influxdb2.InfluxDBClient {
+func (i *Influx) GetDB() influxdb2.Client {
 	return i.DBClient
 }
 

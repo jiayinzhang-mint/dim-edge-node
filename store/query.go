@@ -3,12 +3,13 @@ package store
 import (
 	"context"
 
-	influxdb2 "github.com/influxdata/influxdb-client-go"
+	influxdbAPI "github.com/influxdata/influxdb-client-go/api"
+	"github.com/influxdata/influxdb-client-go/api/write"
 	"github.com/sirupsen/logrus"
 )
 
 // InsertData insert data
-func (i *Influx) InsertData(p []*influxdb2.Point, bucket string, org string) (err error) {
+func (i *Influx) InsertData(p []*write.Point, bucket string, org string) (err error) {
 	writeAPI := i.GetDB().WriteApiBlocking(org, bucket)
 	err = writeAPI.WritePoint(context.Background(), p...)
 	if err != nil {
@@ -20,7 +21,7 @@ func (i *Influx) InsertData(p []*influxdb2.Point, bucket string, org string) (er
 }
 
 // QueryData query data
-func (i *Influx) QueryData(queryString string, org string) (res *influxdb2.QueryTableResult, err error) {
+func (i *Influx) QueryData(queryString string, org string) (res *influxdbAPI.QueryTableResult, err error) {
 	queryAPI := i.GetDB().QueryApi(org)
 
 	res, err = queryAPI.Query(context.Background(), queryString)

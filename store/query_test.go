@@ -5,6 +5,7 @@ import (
 	"time"
 
 	influxdb2 "github.com/influxdata/influxdb-client-go"
+	"github.com/influxdata/influxdb-client-go/api/write"
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,7 +26,7 @@ func TestInsertData(*testing.T) {
 		time.Now(),
 	)
 
-	err := influx.InsertData([]*influxdb2.Point{p}, "insdim", "insdim")
+	err := influx.InsertData([]*write.Point{p}, "insdim", "insdim")
 
 	logrus.Info(err)
 }

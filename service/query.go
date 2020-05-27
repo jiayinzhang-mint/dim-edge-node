@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	influxdb2 "github.com/influxdata/influxdb-client-go"
+	"github.com/influxdata/influxdb-client-go/api/write"
 )
 
 var floatType = reflect.TypeOf(float64(0))
@@ -61,7 +61,7 @@ func (g *GRPCServer) QueryData(c context.Context, p *protocol.QueryParams) (*pro
 // InsertData insert data
 func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams) (*protocol.InsertDataRes, error) {
 	var (
-		m     []*influxdb2.Point
+		m     []*write.Point
 		r     = &protocol.InsertDataRes{}
 		err   error
 		ts    time.Time
@@ -82,7 +82,7 @@ func (g *GRPCServer) InsertData(c context.Context, p *protocol.InsertDataParams)
 		}
 
 		// form metric
-		m = append(m, influxdb2.NewPoint(
+		m = append(m, write.NewPoint(
 			x.Name,
 			x.Tags,
 			fields,
