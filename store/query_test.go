@@ -11,7 +11,7 @@ import (
 
 func TestInsertData(*testing.T) {
 	influx := &Influx{
-		Address: "http://192.168.64.16:32565",
+		Address: "http://192.168.64.24:31830",
 	}
 	if err := influx.ConnectToDB(); err != nil {
 		logrus.Error(err)
@@ -33,7 +33,7 @@ func TestInsertData(*testing.T) {
 
 func TestQuery(*testing.T) {
 	influx := &Influx{
-		Address: "http://192.168.64.18:31048",
+		Address: "http://192.168.64.24:31830",
 	}
 
 	err := influx.ConnectToDB()

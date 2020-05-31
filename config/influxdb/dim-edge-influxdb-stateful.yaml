@@ -5,7 +5,6 @@ metadata:
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.21.0 ()
-  creationTimestamp: null
   labels:
     app: dim-edge-influxdb
     io.kompose.service: dim-edge-influxdb
@@ -22,20 +21,20 @@ spec:
       annotations:
         kompose.cmd: kompose convert
         kompose.version: 1.21.0 ()
-      creationTimestamp: null
+
       labels:
         io.kompose.service: dim-edge-influxdb
     spec:
       containers:
         - image: quay.io/influxdb/influxdb:2.0.0-beta
-          imagePullPolicy: ''
+          imagePullPolicy: Never
           name: dim-edge-influxdb
           ports:
             - containerPort: 9999
           resources:
             limits:
-              cpu: '200m'
-              memory: '100Mi'
+              cpu: "200m"
+              memory: "100Mi"
           volumeMounts:
             - mountPath: /var/lib/influxdb
               name: var-lib-influxdb
@@ -43,7 +42,7 @@ spec:
     - metadata:
         name: var-lib-influxdb
       spec:
-        accessModes: ['ReadWriteMany']
+        accessModes: ["ReadWriteMany"]
         resources:
           requests:
             storage: 5Gi
